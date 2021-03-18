@@ -1,11 +1,5 @@
 
-
-
-
-
-
-
-nums = [1,2,3,5,5,5]
+#
 def function(nums):
     if len(nums) == 1:
         return 1
