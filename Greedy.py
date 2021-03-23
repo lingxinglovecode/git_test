@@ -11,14 +11,15 @@ def min_fuel(gas_station,max_distance):
     num = 0
     while(x!=len(gas_station)-1):
         now_index = x
-        while(gas_station[x+1]-gas_station[now_index] <= max_distance) and ((x+1) < len(gas_station)-1):
+        while(x < len(gas_station)-1)and(gas_station[x+1]-gas_station[now_index] <= max_distance):
             x = x + 1
         if (now_index == x):
             return False
-        num = num+1
+        if x<(len(gas_station)-1):
+            num = num+1
     return num
 
 gas_station = [0,100,200,300]
-max_distance = 100
+max_distance = 200
 num=min_fuel(gas_station,max_distance)
 print(num)
