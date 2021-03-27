@@ -234,16 +234,49 @@ class Solution:
                         return False
         return True
 
+    #11.旋转一个nxn的二维矩阵，顺时针旋转90°
+
+    #方法一：先上下颠倒然后沿着对角线交换元素
+    def rotate(self, matrix) :
+        n = len(matrix)
+        # 上下颠倒
+        for row in range(n // 2):
+            for col in range(n):
+                matrix[row][col], matrix[n - row - 1][col] = matrix[n - row - 1][col], matrix[row][col]
+        # 沿着对角线互换元素
+        for row in range(n):
+            for col in range(row):
+                matrix[row][col], matrix[col][row] = matrix[col][row], matrix[row][col]
+        return matrix
+
+    #方法二：
+    def rotate(self, matrix) :
+        n = len(matrix)
+        for layer in range(n//2):
+            for num in range(layer,n-layer-1):
+                temp = matrix[num][n-layer-1]
+                matrix[num][n-layer-1] = matrix[layer][num]
+                temp,matrix[n-layer-1][n-num-1] = matrix[n-layer-1][n-num-1],temp
+              temp,matrix[n-num-1][layer] = matrix[n-num-1][layer],temp
+                matrix[layer][num] = temp
+        return matrix
+
+
+
+
 
 
 
 if __name__=='__main__':
     # nums1 = [0]
     # nums2 = [1,2,3,4]
-    # solution = Solution()
+    solution = Solution()
     # solution.intersect(nums1,nums2)
     # solution.moveZeroes(nums1)
     # solution.singleNumber(nums)
-
+    matrix = [[1, 2], [3, 4]]
+    matrix = [[5,1,9,11],[2,4,8,10],[13,3,6,7],[15,14,12,16]]
+    matrix=solution.rotate(matrix)
+    print(matrix)
 
 
