@@ -72,20 +72,30 @@ class Solution:
             y = y//10
         return num if x>0 else -num
 
+    #字符串中的第一个唯一字符
+    #给定一个字符串，找到它的第一个不重复的字符，并返回它的索引。如果不存在，则返回 -1。
+    def firstUniqChar(self,s):
+
+        s_list = list(s)
+        hashtable = dict()
+        for i in s_list:
+            if i in hashtable:
+                hashtable[i] = hashtable[i] + 1
+                continue
+            hashtable[i] = 1
+
+        for i in range(len(s_list)):
+            if hashtable[s_list[i]] == 1:
+                return i
+        return -1
 
 
-
-
-
-
-
-
-
-
-
-
-
-
+        # for key,value in enumerate(hashtable):
+        #     if hashtable[value] == 1:
+        #         for i in range(len(s_list)):
+        #             if s_list[i] == value:
+        #                 return i
+        # return -1
 
 
 
@@ -94,7 +104,9 @@ if __name__=='__main__':
     solution = Solution()
     string = ["H ","a ","n ","n","a","h"]
     x = 1463847412
+    s = 'leetcode'
     solution.reverseString(string)
+
     print(solution.reverse_int(x))
-    print(string)
+    print(solution.firstUniqChar(s))
 
