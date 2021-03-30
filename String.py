@@ -132,11 +132,7 @@ class Solution:
     #5.验证回文串
     #给定一个字符串，验证它是否是回文串，只考虑字母和数字字符，可以忽略字母的大小写。
 
-    #辅助函数，判断一个字符是否为数组或者字母
-    def is_num_or_alpha(self,s):
-        if s.isalpha() or s.isalnum():
-            return True
-        return False
+
     #方法1：双指针，开始一个，最后一个，比较字母和数字是否相同，不同则False，若相同当左面指针等于或者大于右面的时候结束
     def isPalindrome(self,s):
         if len(s) <= 1:
@@ -145,11 +141,11 @@ class Solution:
         first = 0
         last = n-1
         while True:
-            while not (self.is_num_or_alpha(s[first])) and first<n-1:
+            while not s[first].isalnum() and first<n-1:
                 first = first + 1
-            while not (self.is_num_or_alpha(s[last])) and last>0:
+            while not s[last].isalnum() and last>0:
                 last = last - 1
-            if (not self.is_num_or_alpha(s[first])) and (not self.is_num_or_alpha(s[last])):
+            if (not s[first].isalnum()) and (not s[last].isalnum()):
                 return True
             if s[first].lower() == s[last].lower():
                 first = first + 1
@@ -159,12 +155,28 @@ class Solution:
                 continue
             return False
         return True
+    #简化版双指针，思想一样就是简化了一些行
+    def isPalindrome(self, s: str) -> bool:
+        n = len(s)
+        left, right = 0, n-1
+        while left < right:
+            while left < right and not s[left].isalnum():
+                left += 1
+            while left < right and not s[right].isalnum():
+                right -= 1
+            if s[left].lower() != s[right].lower():
+                return False
+            left += 1
+            right -= 1
+        return True
+
+
 
     #方法2：将字符串中所有字符和数字存在另一个变量temp中，判断temp和其倒序字符串temp[::-1]是否相同
     def isPalindrome(self,s):
         temp=''
         for i in range(len(s)):
-            if self.is_num_or_alpha(s[i]):
+            if s[i].isalnum():
                 temp = temp+s[i]
         if temp == temp[::-1]:
             return True
