@@ -257,7 +257,7 @@ class Solution:
                 temp = matrix[num][n-layer-1]
                 matrix[num][n-layer-1] = matrix[layer][num]
                 temp,matrix[n-layer-1][n-num-1] = matrix[n-layer-1][n-num-1],temp
-              temp,matrix[n-num-1][layer] = matrix[n-num-1][layer],temp
+                temp,matrix[n-num-1][layer] = matrix[n-num-1][layer],temp
                 matrix[layer][num] = temp
         return matrix
 
