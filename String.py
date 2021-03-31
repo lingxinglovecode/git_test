@@ -189,6 +189,68 @@ class Solution:
         return temp == temp[::-1]
 
 
+    #6.请你来实现一个 myAtoi(string s) 函数，使其能将字符串转换成一个 32 位有符号整数
+    # 函数myAtoi(string s) 的算法如下：
+
+    # 读入字符串并丢弃无用的前导空格
+    # 检查下一个字符（假设还未到字符末尾）为正还是负号，读取该字符（如果有）。 确定最终结果是负数还是正数。 如果两者都不存在，则假定结果为正。
+    # 读入下一个字符，直到到达下一个非数字字符或到达输入的结尾。字符串的其余部分将被忽略。
+    # 将前面步骤读入的这些数字转换为整数（即，"123" -> 123， "0032" -> 32）。如果没有读入数字，则整数为 0 。必要时更改符号（从步骤 2 开始）。
+    # 如果整数数超过 32 位有符号整数范围 [−231, 231 1] ，需要截断这个整数，使其保持在这个范围内。具体来说，小于 −231 的整数应该被固定为 −231 ，大于 231− 1 的整数应该被固定为 231− 1 。
+    # 返回整数作为最终结果。
+    # 注意：
+    #
+    # 本题中的空白字符只包括空格字符 ' ' 。
+    # 除前导空格或数字后的其余字符串外，请勿忽略 任何其他字符。
+
+    #方法1：根据题意直接编写
+    def myAtoi(self, s) :
+        i = 0
+        num = ''
+        sign = 1
+        while i <= len(s)-1 and s[i] == " ":
+            i = i + 1
+        if i > len(s)-1 or s == '':
+            return 0
+        if s[i] == "-":
+            sign = -1
+            i = i + 1
+        elif s[i] == "+":
+            i = i + 1
+        boundry = (1<<31)-1 if sign>0 else 1<<31
+        while i <= len(s)-1:
+            if s[i].isdigit():
+                num = num + s[i]
+                i = i + 1
+                continue
+            break
+        if num == "":
+            return 0
+        num = sign * int(num)
+        if abs(num) > boundry:
+            return sign * boundry
+        return num
+
+    #方法2：使用正则表达式
+    def myAtoi(self,s):
+        INT_MAX = 2**31 - 1
+        INT_MIN = -2**31
+        s = s.strip()
+        num = re.findall('^[\+\-]?\d+',s)
+        num = int(*num)
+        return max(min(INT_MAX,num),INT_MIN)
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -213,4 +275,4 @@ if __name__=='__main__':
     print(solution.firstUniqChar(s))
     print(solution.isAnagram(s,t))
     print(solution.isPalindrome(s))
-
+    print(solution.myAtoi(' '))
