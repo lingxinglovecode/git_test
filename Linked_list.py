@@ -115,6 +115,102 @@ class Solution:
         prev.next = prev.next.next
         return temp.next
 
+    #2.翻转一个单链表
+
+    #方法1：栈的思想。先把链表中元素存储，然后再重新排序。
+    def reverseList(self,head):
+        if not head:
+            return head
+        stack = list()
+        cur = head
+        while cur:
+            stack.append(ListNode(cur.val))
+            cur = cur.next
+        rev_head = stack.pop()
+        rev_last = rev_head
+        while len(stack) != 0:
+            rev_last.next = stack.pop()
+            rev_last = rev_last.next
+        return rev_head
+
+    #方法2：依次遍历并将每一个元素移动位置至开头
+    def reverseList(self,head):
+        if not head:
+            return head
+        cur = head
+        while cur.next:
+            temp = ListNode(cur.next.val)
+            cur.next = cur.next.next
+            temp.next = head
+            head = temp
+        return head
+
+    #方法3：递归的思想
+    def reverseList(self,head):
+        if head == None or head.next == None:
+            return head
+        new_head = self.reverseList(head.next)
+        head.next.next = head
+        head.next = None
+        return new_head
+
+
+    #3.合并两个有序列表
+    #将两个升序链表合并为一个新的 升序 链表并返回。新链表是通过拼接给定的两个链表的所有节点组成的。
+
+    #方法1：双指针
+    def mergeTwoLists(self, l1, l2):
+        one = l1
+        two = l2
+        new_list_head = ListNode(0)
+        new_node = new_list_head
+        while one or two:
+            if one and (not two or one.val <= two.val):
+                value = one.val
+                one = one.next
+            elif two:
+                value = two.val
+                two = two.next
+            new_node.next = ListNode(value)
+            new_node = new_node.next
+        return new_list_head.next
+
+
+    def mergeTwoLists(self,l1,l2):
+
+        if not l1:
+            return l2
+        if not l2:
+            return l1
+        if l1.val <= l2.val:
+            l1.next = self.mergeTwoLists(l1.next,l2)
+            return l1
+        else:
+            l2.next = self.mergeTwoLists(l1,l2.next)
+            return l2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -138,9 +234,17 @@ if __name__ == '__main__':
         list_node_1 = ListNode(1)
         list_node_2 = ListNode(2)
         list_node_3 = ListNode(3)
+        list_node_4 = ListNode(4)
         list_node_1.next = list_node_2
         list_node_2.next = list_node_3
+        list_node_3.next = list_node_4
+
+        list_2 = ListNode(2)
+        list_2.next = ListNode(3)
+        list_2.next.next = ListNode(4)
     print(list_node_1)
     solution  = Solution()
-    new_node = solution.removeNthFromEnd(list_node_1,1)
+    # new_node = solution.removeNthFromEnd(list_node_1,1)
+    # solution.reverseList(list_node_1)
+    new_list = solution.mergeTwoLists(list_node_1,list_2)
     a=2
