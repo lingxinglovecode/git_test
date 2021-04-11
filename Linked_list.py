@@ -65,6 +65,16 @@ class MyLinkedList:
 
 class Solution:
 
+    #递归的应用：逆序输出链表中的值
+    def printList_reverse(self,head):
+        if head == None:
+            return
+        self.printList_reverse(head.next)
+        print(head.val)
+
+
+
+
     #解法1：如果传入的是自定义的mylistnode，可以直接调用其中size属性和deleteAtIndex方法
     def removeNthFromEnd(self,head,n):
         index = head.size - n
@@ -115,7 +125,7 @@ class Solution:
         prev.next = prev.next.next
         return temp.next
 
-    #2.翻转一个单链表
+    #2.反转一个单链表
 
     #方法1：栈的思想。先把链表中元素存储，然后再重新排序。
     def reverseList(self,head):
@@ -175,7 +185,7 @@ class Solution:
             new_node = new_node.next
         return new_list_head.next
 
-
+    #方法2：递归
     def mergeTwoLists(self,l1,l2):
 
         if not l1:
@@ -189,30 +199,105 @@ class Solution:
             l2.next = self.mergeTwoLists(l1,l2.next)
             return l2
 
+    #4.判断一个链表是否为回文链表
 
 
+    #方法1：栈
+    def isPalindrome(self,head):
+        # 判断长度
+        len_list = 0
+        len_head = head
+        while len_head:
+            len_list += 1
+            len_head = len_head.next
 
+        stack = list()
+        start = head
+        mid = len_list // 2
+        for _ in range(mid):
+            stack.append(start.val)
+            start = start.next
+        mid_node = start.next if len_list%2 != 0 else start
+        for _ in range(mid):
+            if stack.pop() != mid_node.val:
+                return False
+            mid_node = mid_node.next
+        return True
 
+    #方法2：双指针
+    def isPalindrome(self,head):
+        def first_half_end(head):
+            slow = head
+            fast = head
+            while fast.next and fast.next.next:
+                slow = slow.next
+                fast = fast.next.next
+            return slow
 
+        def reverse_List(head):
+            cur = head
+            while cur.next:
+                temp = ListNode(cur.next.val)
+                cur.next = cur.next.next
+                temp.next = head
+                head = temp
+            return head
 
+        if head == None or head.next == None:
+            return True
+        first_half_end = first_half_end(head)
+        second_half_start = reverse_List(first_half_end.next)
 
+        flag = True
+        first = head
+        second = second_half_start
+        while second:
+            if first.val != second.val:
+                flag = False
+                break
+            first = first.next
+            second = second.next
+        first_half_end.next = reverse_List(second_half_start)
+        return flag
 
+    #方法3：递归
+    def isPalindrome(self,head):
+        self.temp = head
+        def Checkfrombottom(head):
+            if head == None:
+                return True
+            result = Checkfrombottom(head.next) and head.val == self.temp.val
+            self.temp = self.temp.next
+            return result
+        return Checkfrombottom(head)
 
+    #5.判断一个链表是不是环形链表
 
+    #方法1：双指针
+    def hasCycle(self, head):
+        slow = head
+        if not head or not head.next or not head.next.next:
+            return False
+        fast = head.next.next
+        while fast.next and fast.next.next:
+            if slow == fast  or fast.next == slow:
+                return True
+            slow = slow.next
+            fast = fast.next.next
+        return False
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+    #方法2：哈希表
+    def hasCycle(self, head):
+        hashmap = dict()
+        move = head
+        if not move or not move.next:
+            return False
+        while move:
+            if move in hashmap:
+                return True
+            hashmap[move] = 1
+            move = move.next
+        return False
 
 
 
@@ -233,8 +318,8 @@ if __name__ == '__main__':
     if list_node_flag:
         list_node_1 = ListNode(1)
         list_node_2 = ListNode(2)
-        list_node_3 = ListNode(3)
-        list_node_4 = ListNode(4)
+        list_node_3 = ListNode(2)
+        list_node_4 = ListNode(1)
         list_node_1.next = list_node_2
         list_node_2.next = list_node_3
         list_node_3.next = list_node_4
@@ -246,5 +331,8 @@ if __name__ == '__main__':
     solution  = Solution()
     # new_node = solution.removeNthFromEnd(list_node_1,1)
     # solution.reverseList(list_node_1)
-    new_list = solution.mergeTwoLists(list_node_1,list_2)
-    a=2
+    # new_list = solution.mergeTwoLists(list_node_1,list_2)
+    # a=2
+    # solution.isPalindrome(list_node_1)
+    # solution.printList_reverse(list_2)
+    solution.hasCycle(list_node_1)
