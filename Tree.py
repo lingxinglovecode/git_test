@@ -61,6 +61,91 @@ class Solution:
             cur1 = cur1.right
         return list
 
+    # 0-2中序遍历： 中序遍历先对左子树进行遍历然后是根节点，最后是右子树
+
+    #方法1：递归
+    def inorderTraversal(self, root):
+        if root == None:
+            return []
+        return self.inorderTraversal(root.left) + [root.val] + self.inorderTraversal(root.right)
+
+    #方法2：栈
+    def inorderTraversal(self,root):
+        if root == None:
+            return []
+        node = root
+        stack = list()
+        tree_list = list()
+
+        while node or stack:
+            cur = node
+            while cur:
+                stack.append(cur)
+                cur = cur.left
+            out = stack.pop()
+            tree_list.append(out.val)
+            node = out.right
+        return tree_list
+
+    #方法3：Morris遍历
+    def inorderTraversal(self,root):
+        if root == None:
+            return []
+        cur1 = root
+        tree_list = list()
+
+
+        while cur1:
+            cur2 = cur1.left
+            if cur2 != None:
+
+                #移动到左子树的最后侧节点并建立连接
+                while cur2.right and cur2.right != cur1:
+                        cur2 = cur2.right
+                if cur2.right == None:#没有连接的话建立连接
+                    cur2.right = cur1
+                    cur1 = cur1.left
+                elif cur2.right == cur1: #如果已有连接就删除
+                    tree_list.append(cur1.val)
+                    cur1 = cur1.right
+                    cur2.right = None
+
+            else:
+                tree_list.append(cur1.val)
+                cur1 = cur1.right
+        return tree_list
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -92,6 +177,7 @@ if __name__ == '__main__':
     tree1_node1 = TreeNode(2,left=tree1_node2)
     tree1_root1 = TreeNode(1,right=tree1_node1)
     solution = Solution()
-    list_tree_1 = solution.preorderTraversal(tree1_root1)
-    print(list_tree_1)
-
+    # list_tree_1 = solution.preorderTraversal(tree1_root1)
+    # print(list_tree_1)
+    list_inorder = solution.inorderTraversal(tree1_root1)
+    print(list_inorder)
