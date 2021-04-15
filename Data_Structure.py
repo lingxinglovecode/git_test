@@ -46,7 +46,7 @@ class MyCircularQueue:
     def isFull(self) -> bool:
         return self.count == self.capacity
 
-##python标准库中内置的实现队列的函数collection.deque
+#python标准库中内置的实现队列的函数collection.deque
 
 if __name__ == '__main__':
     test_queue = MyCircularQueue(4)
