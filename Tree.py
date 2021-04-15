@@ -28,8 +28,7 @@ class Solution:
         stack = list()
         result =list()
         if not root:
-            return
-
+            return []
         while stack or node:
             while node:
                 result.append(node.val)
@@ -39,7 +38,7 @@ class Solution:
             node = node.right
         return result
 
-    #方法3：Morris方法
+    #方法3：Morris 遍历
     def preorderTraversal(self,root):
         if root == None:
             return []
@@ -221,6 +220,7 @@ class Solution:
         return result
 
     #0.4层序遍历
+    #方法1：队列
     def levelOrder(self, root: TreeNode):
         if root == None:
             return []
@@ -243,6 +243,26 @@ class Solution:
                 temp_queue = collections.deque()
         return result
 
+    #方法2：递归
+    def levelOrder(self, root: TreeNode):
+        result = [[]]
+        def add_elements(root,level):
+
+            if root and len(result) == level-1:
+                result.append([])
+            if len(result) >= level:
+                result[level-1].append(root.val)
+            if root.left:
+                add_elements(root.left,level+1)
+            if root.right:
+                add_elements(root.right,level+1)
+            return result
+
+        if root == None:
+            return []
+        return add_elements(root,1)
+
+
 
 
 
@@ -263,10 +283,10 @@ class Solution:
 
 
 if __name__ == '__main__':
-    tree1_node4 = TreeNode(3)
-    tree1_node3 = TreeNode(3)
+    tree1_node4 = TreeNode(5)
+    tree1_node3 = TreeNode(4)
     tree1_node2 = TreeNode(3)
-    tree1_node1 = TreeNode(2)
+    tree1_node1 = TreeNode(2,left=tree1_node3,right=tree1_node4)
     tree1_root1 = TreeNode(1,left=tree1_node1,right=tree1_node2)
     solution = Solution()
     # list_tree_1 = solution.preorderTraversal(tree1_root1)
