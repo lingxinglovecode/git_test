@@ -243,10 +243,7 @@ class Solution:
                 temp_queue = collections.deque()
         return result
 
-    def levelOrder(self, root: TreeNode):
-        if root == None:
-            return []
-        return [root.val] + [self.levelOrder(root.left)+self.levelOrder(root.right)]
+
 
 
 
