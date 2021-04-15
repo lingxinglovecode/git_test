@@ -4,6 +4,9 @@
     #0 树的基本概念与基本操作
     #树是一种包含节点的值和其所有子节点列表的数据结构，在树中最为常见的是二叉树，二叉树之中每一个节点至多包含两个子节点
     #其中两个节点成为左子树和右子树
+import collections
+
+
 class TreeNode:
     def __init__(self,val=0,left=None,right=None):
         self.val = val
@@ -217,6 +220,40 @@ class Solution:
         result = save_list(root,result)
         return result
 
+    #0.4层序遍历
+    def levelOrder(self, root: TreeNode):
+        if root == None:
+            return []
+        queue = collections.deque()
+        temp_queue = collections.deque()
+        queue.append(root)
+        result = []
+        temp_res = []
+        while queue:
+            node = queue.popleft()
+            temp_res.append(node.val)
+            if node.left:
+                temp_queue.append(node.left)
+            if node.right:
+                temp_queue.append(node.right)
+            if not queue:
+                result = result + [temp_res]
+                queue = temp_queue
+                temp_res = []
+                temp_queue = collections.deque()
+        return result
+
+    def levelOrder(self, root: TreeNode):
+        if root == None:
+            return []
+        return [root.val] + [self.levelOrder(root.left)+self.levelOrder(root.right)]
+
+
+
+
+
+
+
 
 
 
@@ -229,13 +266,15 @@ class Solution:
 
 
 if __name__ == '__main__':
-
-    tree1_node2 = TreeNode(1)
-    tree1_node1 = TreeNode(3,right=tree1_node2)
-    tree1_root1 = TreeNode(2,left=tree1_node1)
+    tree1_node4 = TreeNode(3)
+    tree1_node3 = TreeNode(3)
+    tree1_node2 = TreeNode(3)
+    tree1_node1 = TreeNode(2)
+    tree1_root1 = TreeNode(1,left=tree1_node1,right=tree1_node2)
     solution = Solution()
     # list_tree_1 = solution.preorderTraversal(tree1_root1)
     # print(list_tree_1)
     # list_inorder = solution.inorderTraversal(tree1_root1)
     # print(list_inorder)
-    list_postorder = solution.postorderTravelsal(tree1_root1)
+    # list_postorder = solution.postorderTravelsal(tree1_root1)
+    list_levelOrder = solution.levelOrder(tree1_root1)
