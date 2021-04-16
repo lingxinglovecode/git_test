@@ -16,6 +16,10 @@ class TreeNode:
     ## 树的操作基础————遍历
 
 class Solution:
+
+    def __init__(self):
+        self.max_depth = 0
+
     # 0-1前序遍历： 前序遍历从根节点开始访问，然后是左子树，最后是右子树
     #方法1：递归
     def preorderTraversal(self,root):
@@ -262,7 +266,29 @@ class Solution:
             return []
         return add_elements(root,1)
 
+    #1.二叉树的最大深度
 
+    #方法1：递归
+    def maxDepth(self, root: TreeNode) :
+        cur_depth = 0
+        max_depth = 0
+        def count_cur_depth(root, cur_depth):
+            nonlocal max_depth
+            if cur_depth > max_depth:
+                max_depth = cur_depth
+            if root.left:
+                count_cur_depth(root.left,cur_depth+1)
+            if root.right:
+                count_cur_depth(root.right,cur_depth+1)
+            return max_depth
+        if root == None:
+            return cur_depth
+        return count_cur_depth(root,1)
+
+    def maxDepth(self, root: TreeNode):
+        if root == None:
+            return 0
+        return max(self.maxDepth(root.left)+1,self.maxDepth(root.right)+1)
 
 
 
@@ -285,9 +311,9 @@ class Solution:
 if __name__ == '__main__':
     tree1_node4 = TreeNode(5)
     tree1_node3 = TreeNode(4)
-    tree1_node2 = TreeNode(3)
-    tree1_node1 = TreeNode(2,left=tree1_node3,right=tree1_node4)
-    tree1_root1 = TreeNode(1,left=tree1_node1,right=tree1_node2)
+    tree1_node2 = TreeNode(10,left=tree1_node3,right=tree1_node4)
+    tree1_node1 = TreeNode(9)
+    tree1_root1 = TreeNode(3,left=tree1_node1,right=tree1_node2)
     solution = Solution()
     # list_tree_1 = solution.preorderTraversal(tree1_root1)
     # print(list_tree_1)
@@ -295,3 +321,5 @@ if __name__ == '__main__':
     # print(list_inorder)
     # list_postorder = solution.postorderTravelsal(tree1_root1)
     list_levelOrder = solution.levelOrder(tree1_root1)
+    deepth = solution.maxDepth(tree1_root1)
+    a=2
