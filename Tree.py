@@ -290,6 +290,30 @@ class Solution:
             return 0
         return max(self.maxDepth(root.left)+1,self.maxDepth(root.right)+1)
 
+    #方法2：栈
+    def maxDepth(self, root: TreeNode):
+        if root == None:
+            return 0
+        stack = list()
+        temp_stack = list()
+        stack.append(root)
+        depth = 0
+        while stack or temp_stack:
+            node = stack.pop()
+            if node.left:
+                temp_stack.append(node.left)
+            if node.right:
+                temp_stack.append(node.right)
+            if not stack:
+                depth = depth + 1
+                stack = temp_stack
+                temp_stack = list()
+        return depth
+
+
+
+
+
 
 
 
