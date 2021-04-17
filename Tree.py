@@ -311,6 +311,59 @@ class Solution:
         return depth
 
 
+    #2. 验证二叉搜索树的有效性
+    # 一个有效的二叉搜索树其左子树应该小于根节点，右子树大于根节点
+
+    #方法1.递归中序遍历判断
+    def isValidBST(self, root: TreeNode) :
+        def inorder(root):
+            if root == None:
+                return []
+            return inorder(root.left) + [root.val] + inorder(root.right)
+        inorder_list = inorder(root)
+        for i in range(len(inorder_list)-1):
+            if inorder_list[i+1] < inorder_list[i]:
+                return False
+        return True
+    #方法2.栈中序遍历判断
+    def isValidBST(self, root: TreeNode):
+        if root == None:
+            return True
+        stack = list()
+        node = root
+        temp = None
+        while stack or node:
+            while node:
+                stack.append(node)
+                node = node.left
+            cur = stack.pop()
+            if temp != None and cur.val <= temp:
+                return False
+            temp = cur.val
+            node = cur.right
+        return True
+    #方法3 直接递归判断
+    def isValidBST(self,root):
+        def isvalid(root,min=float('-inf'),max=float('inf')):
+            if root == None:
+                return True
+            if root.val <= min or root.val >= max:
+                return False
+            return isvalid(root.left,min=min,max=root.val) and isvalid(root.right,min=root.val,max=max)
+        return  isvalid(root)
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -333,17 +386,18 @@ class Solution:
 
 
 if __name__ == '__main__':
-    tree1_node4 = TreeNode(5)
-    tree1_node3 = TreeNode(4)
-    tree1_node2 = TreeNode(10,left=tree1_node3,right=tree1_node4)
-    tree1_node1 = TreeNode(9)
-    tree1_root1 = TreeNode(3,left=tree1_node1,right=tree1_node2)
+    tree1_node4 = TreeNode(7)
+    tree1_node3 = TreeNode(3)
+    tree1_node2 = TreeNode(6,left=tree1_node3,right=tree1_node4)
+    tree1_node1 = TreeNode(4)
+    tree1_root1 = TreeNode(5,left=tree1_node1,right=tree1_node2)
     solution = Solution()
     # list_tree_1 = solution.preorderTraversal(tree1_root1)
     # print(list_tree_1)
     # list_inorder = solution.inorderTraversal(tree1_root1)
     # print(list_inorder)
     # list_postorder = solution.postorderTravelsal(tree1_root1)
-    list_levelOrder = solution.levelOrder(tree1_root1)
-    deepth = solution.maxDepth(tree1_root1)
+    # list_levelOrder = solution.levelOrder(tree1_root1)
+    # deepth = solution.maxDepth(tree1_root1)
+    solution.isValidBST(tree1_root1)
     a=2
