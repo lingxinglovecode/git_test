@@ -13,6 +13,14 @@ class TreeNode:
         self.left = left
         self.right = right
 
+# def list_to_tree(self,tree_list):
+#     for i in range(len(tree_list)):
+#         root = TreeNode(tree_list[0])
+#         for i in range(2):
+#             root.left =
+#
+
+
     ## 树的操作基础————遍历
 
 class Solution:
@@ -352,31 +360,39 @@ class Solution:
             return isvalid(root.left,min=min,max=root.val) and isvalid(root.right,min=root.val,max=max)
         return  isvalid(root)
 
+    #3.验证一个二叉树是否是对称的
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    #方法1：递归遍历后比较
+    def isSymmetric(self, root: TreeNode) :
+        if root == None:
+            return True
+        if not root.left and not root.right:
+            return True
+        def preorder(root):
+            if root == None:
+                return ['None']
+            return [root.val] + preorder(root.left) + preorder(root.right)
+        def reverse_order(root):
+            if root == None:
+                return ['None']
+            return [root.val] + reverse_order(root.right) + reverse_order(root.left)
+        left_node_list = preorder(root.left)
+        right_node_list = reverse_order(root.right)
+        if left_node_list == right_node_list:
+            return True
+        return False
+    #方法2：直接递归
+    def isSymmetric(self, root: TreeNode):
+        if root == None:
+            return True
+        def symmetric(left,right):
+            if left == None and right == None:
+                return True
+            if left and right:
+                if left.val == right.val:
+                    return symmetric(left.left,right.right) and symmetric(left.right,right.left)
+            return False
+        return symmetric(root.left,root.right)
 
 
 
@@ -388,9 +404,9 @@ class Solution:
 if __name__ == '__main__':
     tree1_node4 = TreeNode(7)
     tree1_node3 = TreeNode(3)
-    tree1_node2 = TreeNode(6,left=tree1_node3,right=tree1_node4)
-    tree1_node1 = TreeNode(4)
-    tree1_root1 = TreeNode(5,left=tree1_node1,right=tree1_node2)
+    tree1_node2 = TreeNode(2)
+    tree1_node1 = TreeNode(2)
+    tree1_root1 = TreeNode(1,left=tree1_node1,right=tree1_node2)
     solution = Solution()
     # list_tree_1 = solution.preorderTraversal(tree1_root1)
     # print(list_tree_1)
@@ -399,5 +415,5 @@ if __name__ == '__main__':
     # list_postorder = solution.postorderTravelsal(tree1_root1)
     # list_levelOrder = solution.levelOrder(tree1_root1)
     # deepth = solution.maxDepth(tree1_root1)
-    solution.isValidBST(tree1_root1)
-    a=2
+    # solution.isValidBST(tree1_root1)
+    solution.isSymmetric(tree1_root1)
