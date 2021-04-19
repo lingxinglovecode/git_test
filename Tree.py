@@ -13,12 +13,40 @@ class TreeNode:
         self.left = left
         self.right = right
 
-# def list_to_tree(self,tree_list):
-#     for i in range(len(tree_list)):
-#         root = TreeNode(tree_list[0])
-#         for i in range(2):
-#             root.left =
-#
+def list_to_tree(tree_list):
+    if len(tree_list) == 0:
+        return None
+    queue = collections.deque()
+    length = len(tree_list)
+    root = TreeNode(tree_list[0])
+    queue.append(root)
+    i = 1
+    while i < length:
+        node = queue.popleft()
+        if node:
+            node.left = TreeNode(tree_list[i]) if tree_list[i] else None
+            queue.append(node.left)
+            i = i+1
+            if i < length:
+                node.right = TreeNode(tree_list[i]) if tree_list[i] else None
+                queue.append(node.right)
+                i = i+1
+    return root
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     ## 树的操作基础————遍历
@@ -396,12 +424,9 @@ class Solution:
 
 
 
-
-
-
-
-
 if __name__ == '__main__':
+    tree_list_0 = [1,None,2,3,4,None,5,None]
+    tree = list_to_tree(tree_list_0)
     tree1_node4 = TreeNode(7)
     tree1_node3 = TreeNode(3)
     tree1_node2 = TreeNode(2)
