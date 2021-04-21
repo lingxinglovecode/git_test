@@ -422,6 +422,25 @@ class Solution:
             return False
         return symmetric(root.left,root.right)
 
+    ##4.将有序数组转换为二叉搜索树
+
+    #方法1：递归，每次将列表中间的值作为根节点
+    def sortedArrayToBST(self,nums):
+        if nums == []:
+            return None
+        length = len(nums)
+        mid = length // 2  #得到中间数对应的序号
+        root = TreeNode(nums[mid])
+        if nums[:mid] != []:
+            root.left = self.sortedArrayToBST(nums[:mid])
+        if nums[mid+1:] != []:
+            root.right = self.sortedArrayToBST(nums[mid+1:])
+        return root
+
+
+
+
+
 
 
 if __name__ == '__main__':
@@ -441,4 +460,6 @@ if __name__ == '__main__':
     # list_levelOrder = solution.levelOrder(tree1_root1)
     # deepth = solution.maxDepth(tree1_root1)
     # solution.isValidBST(tree1_root1)
-    solution.isSymmetric(tree1_root1)
+    # solution.isSymmetric(tree1_root1)
+    nums = [-10,-3,0,5,9]
+    solution.sortedArrayToBST(nums)
