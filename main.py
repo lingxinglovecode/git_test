@@ -1,24 +1,7 @@
-# This is a sample Python script.
+import pdfplumber
 
-# Press ⌃R to execute it or replace it with your code.
-# Press Double ⇧ to search everywhere for classes, files, tool windows, actions, and settings.
+url_pdf = 'C://Users//王连兴//Desktop//机器学习第二次作业.pdf'
 
-
-def print_hi(name):
-
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press ⌘F8 to toggle the breakpoint.
-
-
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    da=2
-    if da:
-        a=2
-
-    print("this is a test")
-    print("this is a test")
-    print("this is a test")
-    print("this is a test")
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+with pdfplumber.open(url_pdf) as pdf:
+    first_page = pdf.pages[0]
+    print(first_page.extract_text())
