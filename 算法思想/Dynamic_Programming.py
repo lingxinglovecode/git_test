@@ -39,6 +39,12 @@ class Solution:
             q = r
             r = p+q
         return r
+    #方法3:公式计算
+    #直接用斐波那契数列的公式
+    def climbStairs(self, n):
+        import math
+        sqrt_5 = math.sqrt(5)
+        return int(1/sqrt_5*(((1+sqrt_5)/2)**(n+1)-((1-sqrt_5)/2)**(n+1)))
 
 
 
