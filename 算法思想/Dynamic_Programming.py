@@ -84,7 +84,40 @@ class Solution:
             return min_p,profit
         min_p,profit = help(prices)
         return profit
-        
+
+
+    #问题三：最大子序和
+
+    #@方法1：动态规划
+    def maxSubArray(self, nums):
+        if len(nums)==1:
+            return nums[0]
+        for i in range(1,len(nums)):
+            if nums[i-1]>0:
+                nums[i]=nums[i]+nums[i-1]
+        return max(nums)
+
+    #方法2：贪心算法
+    def maxSubArray(self,nums):
+        if len(nums)==1:
+            return nums[0]
+        max_sum = nums[0]
+        cur_sum = nums[0]
+        for i in range(1,len(nums)):
+            if cur_sum<0:
+                cur_sum = nums[i]
+            else:
+                cur_sum = cur_sum+nums[i]
+            if cur_sum>max_sum:
+                max_sum=cur_sum
+        return max_sum
+
+
+
+
+
+
+
 
 
 
@@ -97,6 +130,10 @@ class Solution:
 if __name__ == '__main__':
     dynam_pro = Solution()
     # result = dynam_pro.climbStairs(4)
-    prices = [7,1,5,3,6,4]
-    result = dynam_pro.maxProfit(prices)
+    # prices = [7,1,5,3,6,4]
+    # result = dynam_pro.maxProfit(prices)
+
+    #最大子序和
+    nums = [-2, 1, -3, 4, -1, 2, 1, -5, 4]
+    result = dynam_pro.maxSubArray(nums)
     a=2
