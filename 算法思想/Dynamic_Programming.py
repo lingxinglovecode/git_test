@@ -47,6 +47,46 @@ class Solution:
         return int(1/sqrt_5*(((1+sqrt_5)/2)**(n+1)-((1-sqrt_5)/2)**(n+1)))
 
 
+    ##问题二：买卖股票的最佳时机
+    #方法1：暴力求解
+    def maxProfit(self,prices):
+        max = 0
+        for i in range(len(prices)):
+            for j in range(i+1,len(prices)):
+                temp = prices[j] - prices[i]
+                if temp > max:
+                    max = temp
+        return max
+
+    #方法2：双指针，动态规划
+    def maxProfit(self,prices):
+        min = float('inf')
+        max = 0
+        for i in range(len(prices)):
+            if prices[i]<min:
+                min = prices[i]
+            if prices[i]-min>max:
+                max = prices[i]-min
+        return max
+    #方法3：递归求解（超时）
+    def maxProfit(self,prices):
+        def help(prices_list):
+            if len(prices_list)==1:
+                min_p = prices_list[0]
+                profit = 0
+                return min_p,profit
+            n = len(prices_list)
+            min_p,profit = help(prices_list[:n-1])
+            if prices_list[n-1]<min_p:
+                min_p = prices_list[n-1]
+            if prices_list[n-1]-min_p>profit:
+                profit = prices_list[n-1]-min_p
+            return min_p,profit
+        min_p,profit = help(prices)
+        return profit
+        
+
+
 
 
 
@@ -56,5 +96,7 @@ class Solution:
 
 if __name__ == '__main__':
     dynam_pro = Solution()
-    result = dynam_pro.climbStairs(4)
+    # result = dynam_pro.climbStairs(4)
+    prices = [7,1,5,3,6,4]
+    result = dynam_pro.maxProfit(prices)
     a=2
