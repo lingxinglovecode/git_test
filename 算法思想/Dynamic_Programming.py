@@ -113,6 +113,49 @@ class Solution:
         return max_sum
 
 
+    #问题四：打家劫舍
+    def rob(self,nums):
+        if len(nums)==1:
+            return nums[0]
+        n = len(nums)
+        f = (n+1)*[0]
+        for i in range(0,n):
+            if i<2:
+                f[i+1]=nums[i]
+                continue
+            max_num = max(f[:i])
+            f[i+1] = max_num+nums[i]
+        return max(f)
+    #进一步优化-->直接原地修改
+    def rob(self,nums):
+        if len(nums)==1:
+            return nums[0]
+        n = len(nums)
+        for i in range(2,n):
+            nums[i] = max(nums[:i-1])+nums[i]
+        return max(nums)
+    #拓展，输出抢劫的所有户对应的金钱
+    def rod_2(self,nums):
+        if len(nums)==1:
+            return nums[0],[str(nums[0])]
+        n = len(nums)
+        houses = [[] for i in range(n)]
+        for i in range(n):
+            temp = nums[i]
+            if i>=2:
+                max_idx = nums.index(max(nums[:i - 1]))
+                for house in houses[max_idx]:
+                    houses[i].append(house)
+                nums[i] = nums[max_idx] + nums[i]
+            houses[i].append(temp)
+        return nums,houses
+
+
+
+
+
+
+
 
 
 
@@ -133,7 +176,11 @@ if __name__ == '__main__':
     # prices = [7,1,5,3,6,4]
     # result = dynam_pro.maxProfit(prices)
 
-    #最大子序和
-    nums = [-2, 1, -3, 4, -1, 2, 1, -5, 4]
-    result = dynam_pro.maxSubArray(nums)
-    a=2
+    # #最大子序和
+    # nums = [-2, 1, -3, 4, -1, 2, 1, -5, 4]
+    # result = dynam_pro.maxSubArray(nums)
+
+    #打家劫舍
+    nums = [2,7,9,3,1]
+    # result = dynam_pro.rob(nums)
+    result,houses = dynam_pro.rod_2(nums)
