@@ -28,15 +28,13 @@ class Math:
                 return False
         return True
     def countPrimes(self, n: int):
-
-        primes_dict = dict()
         count = 0
         for i in range(n):
             if self.isPrimes(i) == True:
                 count = count+1
         return count
 
-
+    #方法2：埃氏筛
     def countPrimes(self,n):
         if n<2:
             return 0
@@ -52,6 +50,34 @@ class Math:
                 for j in range(i*i,n,i):
                     isPrimes[j] = 0
         return count
+
+
+    def countPrimes(self,n):
+        if n<2:
+            return 0
+        elif n<=4:
+            return n-2
+        isPrimes = n*[1]
+        primes = []
+        isPrimes[0] = 0
+        isPrimes[1] = 0
+        count = 0
+        for i in range(2,n):
+            if isPrimes[i] == 1:
+                count = count+1
+                primes.append(i)
+            for prime in primes:
+                if i*prime<n:
+                    isPrimes[i*prime] = 0
+                    if i % prime == 0:
+                        break
+                else: break
+        return count
+
+
+
+
+
 
 
 
