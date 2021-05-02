@@ -1,4 +1,6 @@
 import math
+import re
+
 
 class Math:
 
@@ -76,6 +78,7 @@ class Math:
 
     ##2.3的幂
     #给定一个整数，写一个函数来判断它是否是 3 的幂次方。如果是，返回 true ；否则，返回 false 。
+    #方法1：暴力求解
     def isPowerOfThree(self, n: int):
         if n==1:
             return True
@@ -85,14 +88,23 @@ class Math:
                 return True
             num = num * 3
         return False
-
+    #方法2：递归求解
     def isPowerOfThree(self, n: int):
         if n == 0:
             return False
-        if n == 1 or n == 3:
+        if n == 1:
             return True
         return self.isPowerOfThree(int(n/3)) if (n/3).is_integer() else False
-
+    #方法3：转换为以3为基底的数
+    def isPowerOfThree(self, n: int):
+        def rebase(value, new_base):
+            res = ""
+            while value > 0:
+                res = str(value % new_base) + res
+                value = int(value / new_base)
+            return res
+        rebase_num = rebase(n,3)
+        return re.match(r"^10*",rebase_num).group() == rebase_num if re.match(r"^10*",rebase_num)!= None else False
 
 
 
@@ -113,5 +125,5 @@ class Math:
 if __name__ == '__main__':
     math_problem = Math()
     count = math_problem.countPrimes(10)
-    is_Three = math_problem.isPowerOfThree(0)
+    is_Three = math_problem.isPowerOfThree(27)
     a = 2
