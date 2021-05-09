@@ -4,6 +4,7 @@
 
 class Solution():
 
+    ##1.编写一个函数，输入是一个无符号整数（以二进制串的形式），返回其二进制表达式中数字位数为 '1' 的个数（也被称为汉明重量）。
     #方法1：使用api统计字符串中某个字符的个数
     def hammingWeight(self, n: int):
         n = bin(n)
@@ -26,6 +27,13 @@ class Solution():
             n = n>>4
             num = num + table[idx]
         return num
+
+    ##2.两个整数之间的汉明距离指的是这两个数字对应二进制位不同的位置的数目。给出两个整数 x 和 y，计算它们之间的汉明距离
+    #方法1：异或运算后转换位二进制统计1的个数
+    def hammingDistance(self,x,y):
+        num = x^y
+        return bin(num).count('1')
+
 
 
 
