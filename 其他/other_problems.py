@@ -34,6 +34,15 @@ class Solution():
         num = x^y
         return bin(num).count('1')
 
+    ##3.颠倒给定的 32 位无符号整数的二进制位。
+    def  reverseBits(self, n: int):
+        n_str = bin(n)
+        n_list = list(n_str[2:])
+        n_list.reverse()
+        while len(n_list)<32:
+            n_list.append('0')
+        result = ''.join(n_list)
+        return int(result,2)
 
 
 
@@ -43,3 +52,4 @@ if __name__ == "__main__":
     solution = Solution()
     num_ones = solution.hammingWeight(0b11111111111111111111111111111101)
     a=2
+    reverse_num = solution.reverseBits(0b00000010100101000001111010011100)
