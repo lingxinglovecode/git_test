@@ -17,3 +17,5 @@ dog_1 = Dog(12,'Bob')
 dog_2 = Dog(4,'Jack')
 print(dog_1+dog_2)
 print(dog_2)
+
+print()
