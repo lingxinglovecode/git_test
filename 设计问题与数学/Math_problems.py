@@ -124,6 +124,9 @@ class Math:
 
 
 
+
+
+
 if __name__ == '__main__':
     math_problem = Math()
     count = math_problem.countPrimes(10)

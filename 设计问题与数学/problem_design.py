@@ -142,6 +142,45 @@ class MinStack:
     def getMin(self) -> int:
         return self.min_stack[-1]
 
+class Solution:
+#4.有效的括号
+    #给定一个只包括 '('，')'，'{'，'}'，'['，']' 的字符串 s ，判断字符串是否有效。
+
+    ##方法1：使用栈
+    def isValid(self,s):
+        stack = list()
+        if len(s) % 2 != 0:
+            return False
+        left = ['[','{','(']
+        right = [']','}',')']
+        checkbook = {'[':']','(':')','{':'}'}
+        for i in range(len(s)):
+            if s[i] in left:
+                stack.append(s[i])
+            if s[i] in right:
+                if len(stack)==0:
+                    return False
+                left_one = stack.pop()
+                if checkbook[left_one] == s[i]:
+                    continue
+                return False
+        return True if len(stack)==0 else False
+
+    ##方法优化：
+    def isValid(self,s):
+        stack = []
+        for i in range(len(s)):
+            if s[i] == '{':
+                stack.append('}')
+            elif s[i] == '[':
+                stack.append(']')
+            elif s[i] == '(':
+                stack.append(')')
+            elif len(stack) == 0 or stack.pop() != s[i]:
+                return False
+        return len(stack)==0
+
+
 
 
 
@@ -154,6 +193,9 @@ if __name__ == "__main__":
     stack.push(3)
     stack.push(2)
     min = stack.getMin()
+    s = '{[]}'
+    solution= Solution()
+    solution.isValid(s)
 
 
 
