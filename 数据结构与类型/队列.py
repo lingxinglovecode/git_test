@@ -102,7 +102,6 @@ class Solution:
         temp_queue = collections.deque()
         queue.append('0000')
         dead_dict = set(deadends)
-        # dead_list = deadends
         level = 0
         def adjust_locknum(num_str):
             res_list = []
@@ -115,7 +114,6 @@ class Solution:
             return res_list
 
         while queue or temp_queue:
-
             while queue:
                 num = queue.popleft()
                 if num not in dead_dict:
