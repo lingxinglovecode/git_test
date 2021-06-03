@@ -3,6 +3,7 @@
 import collections
 class Solution:
 
+#问题1：计算网络中的岛屿数量  https://leetcode-cn.com/leetbook/read/queue-stack/kbcqv/
     #方法1：使对队列和广度优先，超时
     def numIslands(self,grid):
         m = len(grid)
@@ -90,6 +91,70 @@ class Solution:
         return island_num
 
 
+#问题2：打开转盘锁 https://leetcode-cn.com/leetbook/read/queue-stack/kj48j/
+
+
+
+
+    #广度搜索：二叉树的层序遍历
+    def openLock(self,deadends,target):
+        queue = collections.deque()
+        temp_queue = collections.deque()
+        queue.append('0000')
+        dead_dict = set(deadends)
+        # dead_list = deadends
+        level = 0
+        def adjust_locknum(num_str):
+            res_list = []
+            for i in range(len(num_str)):
+                num = num_str[i]
+                num_adjsted_minus = str(int(num)-1 if int(num)!=0 else 9)
+                num_adjsted_plus = str(int(num)+1 if int(num)!=9 else 0)
+                res_list.append(num_str[:i]+num_adjsted_minus+num_str[i+1:])
+                res_list.append(num_str[:i]+num_adjsted_plus+num_str[i+1:])
+            return res_list
+
+        while queue or temp_queue:
+
+            while queue:
+                num = queue.popleft()
+                if num not in dead_dict:
+                    dead_dict.add(num)
+                    if num==target:
+                        return level
+                    lock_nums = adjust_locknum(num)
+
+                    for lock_num in lock_nums:
+                        if lock_num not in dead_dict:
+                            temp_queue.append(lock_num)
+            level = level+1
+            queue = temp_queue
+            temp_queue = collections.deque()
+        return -1
+
+    #算法优化：
+    def openLock(self,deadends,target):
+        def neighbors(node):
+            for i in range(4):
+                x = int(node[i])
+                for d in (-1, 1):
+                    y = (x + d) % 10
+                    yield node[:i] + str(y) + node[i + 1:]
+
+        dead = set(deadends)
+        queue = collections.deque([('0000', 0)])
+        seen = {'0000'}
+        while queue:
+            node, depth = queue.popleft()
+            if node == target: return depth
+            if node in dead: continue
+            for nei in neighbors(node):
+                if nei not in seen:
+                    seen.add(nei)
+                    queue.append((nei, depth + 1))
+        return -1
+
+
 
 if __name__ == '__main__':
     solution = Solution()
@@ -97,6 +162,10 @@ if __name__ == '__main__':
     num = solution.numIslands(grid)
     print(num)
     a=2
+    deadends = ["5557","5553","5575","5535","5755","5355","7555","3555","6655","6455","4655","4455","5665","5445","5645","5465","5566","5544","5564","5546","6565","4545","6545","4565","5656","5454","5654","5456","6556","4554","4556","6554"]
+    target = "5555"
+
+    print(solution.openLock(deadends,target))
 
 
 
