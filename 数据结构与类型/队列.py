@@ -1,6 +1,7 @@
 
 #队列，先进先出的数据结构FIFO
 import collections
+import numpy as np
 class Solution:
 
 #问题1：计算网络中的岛屿数量  https://leetcode-cn.com/leetbook/read/queue-stack/kbcqv/
@@ -153,6 +154,82 @@ class Solution:
         return -1
 
 
+#问题3：完全平方数 https://leetcode-cn.com/leetbook/read/queue-stack/kfgtt/
+
+    #方法1：广度优先，队列
+    def numSquares(self,n):
+        queue = collections.deque()
+        temp_queue = collections.deque()
+        level = 0
+        def remain_num(num):
+            start = int(np.sqrt(num))
+            res_list = [num-x**2 for x in range(start,0,-1)]
+            return res_list
+
+        queue.append(n)
+        while queue or temp_queue:
+
+            while queue:
+                num = queue.popleft()
+                if num == 0:
+                    return level
+                remain_list = remain_num(num)
+                temp_queue.extend(remain_list)
+            level = level + 1
+            queue = temp_queue
+            temp_queue = collections.deque()
+        return level
+    #代码优化，上面解题超时，记录所有访问过的节点
+    def numSquares(self,n):
+        queue = collections.deque()
+        temp_queue = collections.deque()
+        num_used = set()
+        level = 0
+        def remain_num(num):
+            start = int(np.sqrt(num))
+            res_list = [num-x**2 for x in range(start,0,-1)]
+            return res_list
+
+        queue.append(n)
+        while queue or temp_queue:
+            while queue:
+                num = queue.popleft()
+                if num == 0:
+                    return level
+                if num not in num_used:
+                    remain_list = remain_num(num)
+                    temp_queue.extend(remain_list)
+                    num_used.add(num)
+            level = level + 1
+            queue = temp_queue
+            temp_queue = collections.deque()
+        return level
+
+    #方法2：动态规划 超时，太多重复运算
+    def numSquares(self,n):
+        min_num = n
+        def issquare(num):
+            return np.sqrt(num)%1 == 0
+
+        if issquare(n):
+            return 1
+        for i in range(1,int(np.sqrt(n))):
+            num = self.numSquares(n-i**2) + 1
+            min_num = min(num,min_num)
+        return min_num
+
+    def numSquares(self,n):
+        dp = [0]*(n+1)
+        for i in range(1,n+1):
+            dp[i] = i
+            j = 1
+            while j**2 <= i:
+                dp[i] = min(dp[i],dp[i-j**2]+1)
+                j += 1
+        return dp[n]
+
+
+
 
 if __name__ == '__main__':
     solution = Solution()
@@ -165,6 +242,8 @@ if __name__ == '__main__':
 
     print(solution.openLock(deadends,target))
 
+    num_s = solution.numSquares(10)
+    print(num_s)
 
 
 
