@@ -1,7 +1,10 @@
-
+import collections
 #栈这种数据结构满足LIFO后进先出的规则，如果想要首先处理最后一个元素那么就可以考虑栈的结构
 
-
+class Node:
+    def __init__(self, val = 0, neighbors = None):
+        self.val = val
+        self.neighbors = neighbors if neighbors is not None else []
 
 class Solution:
 
@@ -98,6 +101,55 @@ class Solution:
                 stack.append(result)
         return stack[0]
 
+    #######题目3：克隆图########
+    #https://leetcode-cn.com/leetbook/read/queue-stack/gmcr6/
+    #给定一个无向连通图中的一个节点的引用，返回改图的深拷贝
+
+    #方法1：递归隐性栈+深度优先算法
+    def cloneGraph(self,node):
+        visited = dict()
+        def help(node):
+            if node == None:
+                return
+            if node.val in visited:
+                return visited[node.val]
+            new_node = Node(val=node.val)
+            visited[node.val] = new_node
+            new_node.neighbors = [help(neighbor) for neighbor in node.neighbors]
+            return new_node
+        new_node = help(node)
+
+        return new_node
+
+    #方法2：队列+广度优先算法
+    def cloneGraph(self,node):
+        if node == None:
+            return
+        queue = collections.deque()
+        queue.append(node)
+        node_dict = dict()
+        start_node = Node(val=node.val)
+        node_dict[node.val] = start_node
+        while queue:
+            cur = queue.popleft()
+            for neighbor in cur.neighbors:
+                if neighbor.val in node_dict:
+                    node_dict[cur.val].neighbors.append(node_dict[neighbor.val])
+                else:
+                    new_node = Node(neighbor.val)
+                    node_dict[cur.val].neighbors.append(new_node)
+                    node_dict[neighbor.val] = new_node
+                    queue.append(neighbor)
+        return start_node
+
+
+
+
+
+
+
+
+
 
 if __name__ == '__main__':
     solution = Solution()
@@ -107,3 +159,9 @@ if __name__ == '__main__':
     tokens = ["10","6","9","3","+","-11","*","/","*","17","+","5","+"]
     res = solution.evalRPN(tokens)
     print(res)
+    node_1 = Node(1)
+    node_2 = Node(2)
+    node_1.neighbors.append(node_2)
+    node_2.neighbors.append(node_1)
+    new_node =solution.cloneGraph(node_1)
+    print(node_1)
