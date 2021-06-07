@@ -73,11 +73,37 @@ class Solution:
                     j = j + result[j]
         return result
 
+    #############题目2：逆波兰表达式求值################
+    #https://leetcode-cn.com/leetbook/read/queue-stack/gomvm/
 
+    def evalRPN(self, tokens):
+        stack = list()
+        cal_dict = {"+","-","*","/"}
+        def calculate(sign,num1,num2):
+            if sign == "+":
+                return num1+num2
+            elif sign == "*":
+                return num1*num2
+            elif sign == "/":
+                return int(num1/num2)
+            elif sign == "-":
+                return num1-num2
+        for i in range(len(tokens)):
+            if tokens[i] not in cal_dict:
+                stack.append(int(tokens[i]))
+            else:
+                num_2 = stack.pop()
+                num_1 = stack.pop()
+                result = calculate(tokens[i],num_1,num_2)
+                stack.append(result)
+        return stack[0]
 
 
 if __name__ == '__main__':
     solution = Solution()
     temp = [73, 74, 75, 71, 69, 72, 76, 73]
     res = solution.dailyTemperatures(temp)
+    print(res)
+    tokens = ["10","6","9","3","+","-11","*","/","*","17","+","5","+"]
+    res = solution.evalRPN(tokens)
     print(res)
