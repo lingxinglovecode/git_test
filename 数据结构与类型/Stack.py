@@ -145,10 +145,73 @@ class Solution:
 
 
 
+    #########题目4：目标和#########
+    #https://leetcode-cn.com/leetbook/read/queue-stack/ga4o2/
 
+    #解法1：递归
+    def findTargetSumWays(self, nums, target):
+        if len(nums)==1 and abs(nums[0]) == abs(target):
+            if nums[0]==0:
+                return 2
+            return 1
+        elif len(nums) == 1 and abs(nums[0])!=abs(target):
+            return 0
+        length = len(nums)
+        last = nums[length-1]
+        return self.findTargetSumWays(nums[:length-1],target-last)+self.findTargetSumWays(nums[:length-1],target+last)
 
+    def findTargetSumWays(self,nums,target):
+        count = 0
+        def backtarck(nums,target,index,sum):
+            nonlocal count
+            if index == len(nums):
+                if sum == target:
+                    count = count+1
+            else:
+                backtarck(nums,target,index+1,sum-nums[index])
+                backtarck(nums,target,index+1,sum+nums[index])
+            return count
+        res = backtarck(nums,target,0,0)
+        return res
 
+    def findTargetSumWays(self, nums, target):
+        def dfs(i,t):
+            if i == len(nums):
+                return 1 if t==0 else 0
+            return dfs(i+1,t-nums[i]) + dfs(i+1,t+nums[i])
+        return dfs(0,target)
 
+    ##解法2：动态规划
+    def findTargetSumWays(self,nums,target):
+        n = len(nums)
+        neg = (sum(nums)-target)/2
+        if neg<0 or neg != int(neg):
+            return 0
+        neg = int(neg)
+        dp = [[0 for i in range(neg+1)]for j in range(n+1)]
+        dp[0][0] = 1
+        for i in range(1,n+1):
+            num = nums[i-1]
+            for j in range(neg+1):
+                if num > j:
+                    dp[i][j] = dp[i-1][j]
+                elif num <= j:
+                    dp[i][j] = dp[i-1][j-num] + dp[i-1][j]
+        return dp[n][neg]
+
+    def findTargetSumWays(self, nums, S) :
+        sumAll = sum(nums)
+        if S > sumAll or (S + sumAll) % 2:
+            return 0
+        target = (S + sumAll) // 2
+
+        dp = [0] * (target + 1)
+        dp[0] = 1
+
+        for num in nums:
+            for j in range(target, num - 1, -1):
+                dp[j] = dp[j] + dp[j - num]
+        return dp[-1]
 
 
 if __name__ == '__main__':
@@ -165,3 +228,7 @@ if __name__ == '__main__':
     node_2.neighbors.append(node_1)
     new_node =solution.cloneGraph(node_1)
     print(node_1)
+    nums = [1,1,1,1,1,0]
+    target = 3
+    ways = solution.findTargetSumWays(nums,target)
+    print(ways)
