@@ -2,6 +2,152 @@
 #队列，先进先出的数据结构FIFO
 import collections
 import numpy as np
+
+#用栈来实现队列
+class MyQueue:
+
+    def __init__(self):
+        """
+        Initialize your data structure here.
+        """
+        self.queue = list()
+
+
+    def push(self, x: int) -> None:
+        """
+        Push element x to the back of queue.
+        """
+        self.queue.append(x)
+
+
+    def pop(self) -> int:
+        """
+        Removes the element from in front of queue and returns that element.
+        """
+        temp_stack = list()
+        while self.queue:
+            temp_stack.append(self.queue.pop())
+        pop_value = temp_stack.pop()
+        while temp_stack:
+            self.queue.append(temp_stack.pop())
+            return pop_value
+
+    def peek(self) -> int:
+        """
+        Get the front element.
+        """
+        temp_stack = list()
+        while self.queue:
+            temp_stack.append(self.queue.pop())
+        pop_value = temp_stack[-1]
+        while temp_stack:
+            self.queue.append(temp_stack.pop())
+        return pop_value
+
+
+    def empty(self) -> bool:
+        """
+        Returns whether the queue is empty.
+        """
+        return len(self.queue) == 0
+
+
+
+
+class MyQueue2:
+
+    def __init__(self):
+        """
+        Initialize your data structure here.
+        """
+        self.stack = list()
+        self.temp_stack = list()
+        self.length = 0
+
+    def push(self, x: int) -> None:
+        """
+        Push element x to the back of queue.
+        """
+        self.stack.append(x)
+        store_stack = list()
+        store_stack = self.stack[:]
+        self.length = self.length+1
+        self.temp_stack = list()
+        for i in range(self.length):
+            self.temp_stack.append(self.stack.pop())
+        self.stack = store_stack
+
+    def pop(self) -> int:
+        """
+        Removes the element from in front of queue and returns that element.
+        """
+        self.length -= 1
+
+        return self.temp_stack.pop()
+
+    def peek(self) -> int:
+        """
+        Get the front element.
+        """
+
+        return self.temp_stack[-1]
+
+    def empty(self) -> bool:
+        """
+        Returns whether the queue is empty.
+        """
+        return self.length == 0
+
+class MyQueue3:
+
+    def __init__(self):
+        """
+        Initialize your data structure here.
+        """
+        self.in_stack = list()
+        self.out_stack = list()
+
+    def push(self, x: int) -> None:
+        """
+        Push element x to the back of queue.
+        """
+        self.in_stack.append(x)
+
+    def pop(self) -> int:
+        """
+        Removes the element from in front of queue and returns that element.
+        """
+        if self.out_stack:
+            return self.out_stack.pop()
+        while self.in_stack:
+            self.out_stack.append(self.in_stack.pop())
+        return self.out_stack.pop()
+
+    def peek(self) -> int:
+        """
+        Get the front element.
+        """
+        if self.out_stack:
+            return self.out_stack[-1]
+        while self.in_stack:
+            self.out_stack.append(self.in_stack.pop())
+        return self.out_stack[-1]
+
+    def empty(self) -> bool:
+        """
+        Returns whether the queue is empty.
+        """
+        return len(self.in_stack)+len(self.out_stack) == 0
+# Your MyQueue object will be instantiated and called as such:
+# obj = MyQueue()
+# obj.push(x)
+# param_2 = obj.pop()
+# param_3 = obj.peek()
+# param_4 = obj.empty()
+
+
+
+
 class Solution:
 
 #问题1：计算网络中的岛屿数量  https://leetcode-cn.com/leetbook/read/queue-stack/kbcqv/
@@ -244,6 +390,16 @@ if __name__ == '__main__':
 
     num_s = solution.numSquares(10)
     print(num_s)
+
+    # Your MyQueue object will be instantiated and called as such:
+    obj = MyQueue2()
+    x = 10
+    y = 20
+    obj.push(x)
+    obj.push(y)
+    param_2 = obj.pop()
+    param_3 = obj.peek()
+    param_4 = obj.empty()
 
 
 
