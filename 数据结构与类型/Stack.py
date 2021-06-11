@@ -307,6 +307,33 @@ class Solution:
                 dp[j] = dp[j] + dp[j - num]
         return dp[-1]
 
+    #########题目5：字符串解码#########
+    #https://leetcode-cn.com/leetbook/read/queue-stack/gdwjv/
+    def decodeString(self,s):
+        stack = list()
+        s_len = len(s)
+        i = 0
+        while i<s_len:
+            stack.append(s[i])
+            if stack[-1] == ']':
+                stack.pop()
+                temp=''
+                alpha = stack.pop()
+                while  alpha!= '[':
+                    temp = temp + alpha
+                    alpha = stack.pop()
+                temp = temp[::-1]
+                num = ''
+                while len(stack) and stack[-1].isdigit():
+                    num = num + stack.pop()
+                temp = int(num[::-1]) * temp
+                stack.extend(list(temp))
+            i = i+1
+        res = ''.join(stack)
+        return res
+
+
+
 
 if __name__ == '__main__':
     solution = Solution()
@@ -336,3 +363,7 @@ if __name__ == '__main__':
     param_2 = obj.pop()
     param_3 = obj.top()
     param_4 = obj.empty()
+
+    s = "2[a2[wlx]bc]3[cd]ef"
+    res=solution.decodeString(s)
+    print(res)
