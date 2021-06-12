@@ -332,6 +332,103 @@ class Solution:
         res = ''.join(stack)
         return res
 
+    ###问题6：图像渲染
+    #https://leetcode-cn.com/leetbook/read/queue-stack/g02cj/
+
+    #方法1：广度优先算法+队列
+    def floodFill(self,image,sr,sc,newColor):
+        len_row = len(image)
+        len_col = len(image[0])
+        memory_dict = dict()
+        queue = collections.deque()
+        original_color = image[sr][sc]
+        def find_neighbour(sr,sc):
+            neighbors = []
+            if sr>0 and image[sr-1][sc]==original_color:
+                up = (sr-1,sc)
+                neighbors.append(up)
+            if sr<len_row-1 and image[sr+1][sc]==original_color:
+                down = (sr+1,sc)
+                neighbors.append(down)
+            if sc>0 and image[sr][sc-1]==original_color:
+                left = (sr,sc-1)
+                neighbors.append(left)
+            if sc<len_col-1 and image[sr][sc+1]==original_color:
+                right = (sr,sc+1)
+                neighbors.append(right)
+            return neighbors
+        queue.append((sr,sc))
+        image[sr][sc] = newColor
+        while queue:
+            loc = queue.popleft()
+            neighbors = find_neighbour(loc[0],loc[1])
+            for neighbor in neighbors:
+                if neighbor not in memory_dict:
+                    image[neighbor[0]][neighbor[1]] = newColor
+                    memory_dict[neighbor] = 1
+                    queue.append(neighbor)
+        return image
+
+    #修改一下找邻居节点的方式
+    def floodFill(self,image,sr,sc,newColor):
+        len_row = len(image)
+        len_col = len(image[0])
+        memory_dict = dict()
+        queue = collections.deque()
+        original_color = image[sr][sc]
+        def find_neighbour( sr, sc):
+            dx = [1, 0, 0, -1]
+            dy = [0, 1, -1, 0]
+            neighbors = list()
+            for i in range(4):
+                x = sr + dx[i]
+                y = sc + dy[i]
+                if (x >= 0 and x < len_row) and (y >= 0 and y < len_col) and image[x][y]==original_color:
+                    neighbors.append((x,y))
+            return neighbors
+
+        queue.append((sr,sc))
+        image[sr][sc] = newColor
+        while queue:
+            loc = queue.popleft()
+            neighbors = find_neighbour(loc[0],loc[1])
+            for neighbor in neighbors:
+                if neighbor not in memory_dict:
+                    image[neighbor[0]][neighbor[1]] = newColor
+                    memory_dict[neighbor] = 1
+                    queue.append(neighbor)
+        return image
+
+
+
+
+
+    # 方法2：深度优先+栈
+    def floodFill(self, image, sr, sc, newColor):
+        len_row = len(image)
+        len_col = len(image[0])
+        memory_dict = dict()
+        original_color = image[sr][sc]
+
+        def dfs(row, col):
+            if image[row][col] != original_color or (row, col) in memory_dict:
+                return
+            image[row][col] = newColor
+            memory_dict[(row, col)] = 1
+            if row > 0:
+                dfs(row - 1, col)
+            if row < len_row - 1:
+                dfs(row + 1, col)
+            if col > 0:
+                dfs(row, col - 1)
+            if col < len_col - 1:
+                dfs(row, col + 1)
+
+        dfs(sr, sc)
+        return image
+
+
+
 
 
 
@@ -367,3 +464,10 @@ if __name__ == '__main__':
     s = "2[a2[wlx]bc]3[cd]ef"
     res=solution.decodeString(s)
     print(res)
+
+    image = [[1, 1, 1], [1, 1, 0], [1, 0, 1]]
+    sr = 1
+    sc = 1
+    newColor = 2
+    img = solution.floodFill(image,sr,sc,newColor)
+    print(img)
