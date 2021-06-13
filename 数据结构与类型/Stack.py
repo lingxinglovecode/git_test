@@ -1,5 +1,7 @@
 import collections
 #栈这种数据结构满足LIFO后进先出的规则，如果想要首先处理最后一个元素那么就可以考虑栈的结构
+import copy
+
 
 class Node:
     def __init__(self, val = 0, neighbors = None):
@@ -432,42 +434,55 @@ class Solution:
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 if __name__ == '__main__':
     solution = Solution()
-    temp = [73, 74, 75, 71, 69, 72, 76, 73]
-    res = solution.dailyTemperatures(temp)
-    print(res)
-    tokens = ["10","6","9","3","+","-11","*","/","*","17","+","5","+"]
-    res = solution.evalRPN(tokens)
-    print(res)
-    node_1 = Node(1)
-    node_2 = Node(2)
-    node_1.neighbors.append(node_2)
-    node_2.neighbors.append(node_1)
-    new_node =solution.cloneGraph(node_1)
-    print(node_1)
-    nums = [1,1,1,1,1,0]
-    target = 3
-    ways = solution.findTargetSumWays(nums,target)
-    print(ways)
+    # temp = [73, 74, 75, 71, 69, 72, 76, 73]
+    # res = solution.dailyTemperatures(temp)
+    # print(res)
+    # tokens = ["10","6","9","3","+","-11","*","/","*","17","+","5","+"]
+    # res = solution.evalRPN(tokens)
+    # print(res)
+    # node_1 = Node(1)
+    # node_2 = Node(2)
+    # node_1.neighbors.append(node_2)
+    # node_2.neighbors.append(node_1)
+    # new_node =solution.cloneGraph(node_1)
+    # print(node_1)
+    # nums = [1,1,1,1,1,0]
+    # target = 3
+    # ways = solution.findTargetSumWays(nums,target)
+    # print(ways)
 
     # Your MyStack object will be instantiated and called as such:
-    obj = MyStack()
-    x = 7
-    y=9
-    obj.push(x)
-    obj.push(y)
-    param_2 = obj.pop()
-    param_3 = obj.top()
-    param_4 = obj.empty()
+    # obj = MyStack()
+    # x = 7
+    # y=9
+    # obj.push(x)
+    # obj.push(y)
+    # param_2 = obj.pop()
+    # param_3 = obj.top()
+    # param_4 = obj.empty()
 
-    s = "2[a2[wlx]bc]3[cd]ef"
-    res=solution.decodeString(s)
-    print(res)
+    # s = "2[a2[wlx]bc]3[cd]ef"
+    # res=solution.decodeString(s)
+    # print(res)
 
-    image = [[1, 1, 1], [1, 1, 0], [1, 0, 1]]
-    sr = 1
-    sc = 1
-    newColor = 2
-    img = solution.floodFill(image,sr,sc,newColor)
-    print(img)
+    # image = [[1, 1, 1], [1, 1, 0], [1, 0, 1]]
+    # sr = 1
+    # sc = 1
+    # newColor = 2
+    # img = solution.floodFill(image,sr,sc,newColor)
+    # print(img)
+

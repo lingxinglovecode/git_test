@@ -1,6 +1,8 @@
 
 #队列，先进先出的数据结构FIFO
 import collections
+import copy
+
 import numpy as np
 
 #用栈来实现队列
@@ -374,6 +376,129 @@ class Solution:
                 j += 1
         return dp[n]
 
+###问题4：01矩阵 给定一个由 0 和 1 组成的矩阵，找出每个元素到最近的 0 的距离。
+# https://leetcode-cn.com/leetbook/read/queue-stack/g7pyt/
+
+    # 方法1：广度优先 超时
+    def updateMatrix(self, mat):
+        res_mat = copy.deepcopy(mat)
+        row = len(mat)
+        col = len(mat[0])
+
+        dx = [0, 1, -1, 0]
+        dy = [1, 0, 0, -1]
+
+        def find_distance(r, c):
+            queue = collections.deque()
+            temp_queue = collections.deque()
+            queue.append((r, c))
+            dis = 0
+            while queue or temp_queue:
+                loc = queue.popleft()
+                if mat[loc[0]][loc[1]] == 0:
+                    return dis
+                for i in range(4):
+                    x = loc[0] + dx[i]
+                    y = loc[1] + dy[i]
+                    if x >= 0 and x < row and y >= 0 and y < col:
+                        temp_queue.append((x, y))
+                if not queue:
+                    queue = temp_queue
+                    temp_queue = collections.deque()
+                    dis += 1
+
+        for i in range(row):
+            for j in range(col):
+                dis = find_distance(i, j)
+                res_mat[i][j] = dis
+        return res_mat
+
+    # 方法1改进：遍历0进行更新 还是超时了 比第一害差
+    def updateMatrix(self, mat):
+        res_mat = copy.deepcopy(mat)
+        for i in range(len(res_mat)):
+            for j in range(len(res_mat[0])):
+                res_mat[i][j] = float('inf')
+        row = len(mat)
+        col = len(mat[0])
+        res_dict = dict()
+        dx = [0, 1, -1, 0]
+        dy = [1, 0, 0, -1]
+
+        def updata(r, c):
+            temp_dict = dict()
+            queue = collections.deque()
+            temp_queue = collections.deque()
+            queue.append((r, c))
+            dis = 0
+            while queue or temp_queue:
+                loc = queue.popleft()
+                if loc not in temp_dict:
+                    if dis < res_mat[loc[0]][loc[1]]:
+                        res_mat[loc[0]][loc[1]] = dis
+                    temp_dict[loc] = 1
+
+                    for i in range(4):
+                        x = loc[0] + dx[i]
+                        y = loc[1] + dy[i]
+                        if x >= 0 and x < row and y >= 0 and y < col and ((x, y) not in temp_dict):
+                            temp_queue.append((x, y))
+                if not queue:
+                    queue = temp_queue
+                    dis += 1
+                    temp_queue = collections.deque()
+
+        for i in range(row):
+            for j in range(col):
+                if mat[i][j] == 0:
+                    updata(i, j)
+        return res_mat
+
+    # 方法1改进2 一次遍历所有0：
+    # 参考官方题解：https://leetcode-cn.com/problems/01-matrix/solution/01ju-zhen-by-leetcode-solution/
+    def updateMatrix(self, mat):
+        queue = collections.deque()
+        row = len(mat)
+        col = len(mat[0])
+        res_mat = [[0] * col for _ in range(row)]
+        zeros = [(i, j) for i in range(row) for j in range(col) if mat[i][j] == 0]
+        res_dic = set(zeros)
+        queue.extend(zeros)
+
+        while queue:
+            loc = queue.popleft()
+            for dx, dy in [(0, 1), (1, 0), (0, -1), (-1, 0)]:
+                x = loc[0] + dx
+                y = loc[1] + dy
+                if x >= 0 and x < row and y >= 0 and y < col and ((x, y) not in res_dic):
+                    res_mat[x][y] = res_mat[loc[0]][loc[1]] + 1
+                    queue.append((x, y))
+                    res_dic.add((x, y))
+        return res_mat
+
+    def updateMatrix(self, mat):
+        row = len(mat)
+        col = len(mat[0])
+        dp = [[float('inf')] * col for _ in range(row)]
+        for i in range(row):
+            for j in range(col):
+                if mat[i][j] == 0:
+                    dp[i][j] = 0
+
+        for i in range(row):
+            for j in range(col):
+                if i - 1 >= 0:
+                    dp[i][j] = min(dp[i - 1][j] + 1, dp[i][j])
+                if j - 1 >= 0:
+                    dp[i][j] = min(dp[i][j - 1] + 1, dp[i][j])
+
+        for m in range(row - 1, -1, -1):
+            for n in range(col - 1, -1, -1):
+                if m + 1 < row:
+                    dp[m][n] = min(dp[m + 1][n] + 1, dp[m][n])
+                if n + 1 < col:
+                    dp[m][n] = min(dp[m][n + 1] + 1, dp[m][n])
+        return dp
 
 
 
@@ -400,6 +525,11 @@ if __name__ == '__main__':
     param_2 = obj.pop()
     param_3 = obj.peek()
     param_4 = obj.empty()
+
+    ##问题4：
+    mat = [[0, 0, 0], [0, 1, 0], [1, 1, 1]]
+    res = solution.updateMatrix(mat)
+    print(res)
 
 
 
