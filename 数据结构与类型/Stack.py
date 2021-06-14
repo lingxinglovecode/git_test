@@ -437,19 +437,32 @@ class Solution:
     ####问题7：钥匙与房间
     #https://leetcode-cn.com/leetbook/read/queue-stack/gle1r/
     def canVisitAllRooms(self, rooms) :
+        seen = set()
+        rooms_visied = set()
+        stack = list()
+        stack.extend([(0,room,1) for room in rooms[0]])
+        seen.add(0)
+        max_visted = 0
+        while stack:
+            cur_room,next_room,visited_num = stack.pop()
 
-        def dfs(x):
-            vis.add(x)
-            nonlocal vis_num
-            vis_num += 1
-            for room in rooms[x]:
-                if room not in vis:
 
+            if next_room not in seen:
+                visited_num += 1
+                seen.add(next_room)
+            if (cur_room,next_room) not in rooms_visied:
+                rooms_visied.add((cur_room, next_room))
+                for room_next_next in rooms[next_room]:
+                    if (next_room,room_next_next) not in rooms_visied:
+                        stack.append((next_room,room_next_next,visited_num))
 
-        vis = set()
-        vis_num = 0
-        dfs(0)
-        return len(rooms) == vis_num
+            if visited_num>max_visted:
+                max_visted = visited_num
+                if max_visted == len(rooms):
+                    return True
+
+        return False
+
 
 
 
