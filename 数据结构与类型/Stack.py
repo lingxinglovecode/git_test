@@ -434,14 +434,22 @@ class Solution:
 
 
 
+    ####问题7：钥匙与房间
+    #https://leetcode-cn.com/leetbook/read/queue-stack/gle1r/
+    def canVisitAllRooms(self, rooms) :
+
+        def dfs(x):
+            vis.add(x)
+            nonlocal vis_num
+            vis_num += 1
+            for room in rooms[x]:
+                if room not in vis:
 
 
-
-
-
-
-
-
+        vis = set()
+        vis_num = 0
+        dfs(0)
+        return len(rooms) == vis_num
 
 
 
@@ -485,4 +493,8 @@ if __name__ == '__main__':
     # newColor = 2
     # img = solution.floodFill(image,sr,sc,newColor)
     # print(img)
+
+    rooms = [[2,3],[],[2],[1,3,1]]
+    vis = solution.canVisitAllRooms(rooms)
+    print(vis)
 
