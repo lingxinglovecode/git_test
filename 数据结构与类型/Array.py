@@ -261,6 +261,62 @@ class Solution:
                 matrix[layer][num] = temp
         return matrix
 
+    #12.三数之和
+    #列表中找到三个数使其和为0
+    #https://leetcode-cn.com/leetbook/read/top-interview-questions-medium/xvpj16/
+
+    #解法一：暴力三重循环 哈希表去重 超时
+    def threeSum(self,nums):
+        nums.sort()
+        res = []
+        seen = set()
+        for i in range(len(nums)):
+            if nums[i]>0:
+                break
+
+            for j in range(i+1,len(nums)):
+
+                if nums[i]+nums[j]>0:
+                    break
+                for k in range(len(nums)-1,j,-1):
+                    if nums[i]+nums[j]+nums[k]<0:
+                        break
+                    if nums[i]+nums[j]+nums[k] == 0:
+                        if (nums[i],nums[j],nums[k]) not in seen:
+                            res.append([nums[i],nums[j],nums[k]])
+                            seen.add((nums[i],nums[j],nums[k]))
+
+        return res
+
+    #解法二：一重循环+双指针
+    def threeSum(self,nums):
+        nums.sort()
+        res = []
+        for i in range(len(nums)):
+            if i==0 or nums[i]!=nums[i-1]:
+                start = i+1
+                end = len(nums)-1
+                while start < end:
+                    if start>i+1 and nums[start] == nums[start-1]:
+                        start = start+1
+                        continue
+                    if end<len(nums)-1 and nums[end] == nums[end+1]:
+                        end = end-1
+                        continue
+                    if nums[i]+nums[start]+nums[end]>0:
+                        end = end-1
+                    elif nums[i]+nums[start]+nums[end]<0:
+                        start = start+1
+                    elif nums[i]+nums[start]+nums[end]==0:
+                        res.append([nums[i],nums[start],nums[end]])
+                        start = start+1
+                        end = end-1
+        return res
+
+
+
+
+
 
 
 
@@ -274,9 +330,15 @@ if __name__=='__main__':
     # solution.intersect(nums1,nums2)
     # solution.moveZeroes(nums1)
     # solution.singleNumber(nums)
-    matrix = [[1, 2], [3, 4]]
-    matrix = [[5,1,9,11],[2,4,8,10],[13,3,6,7],[15,14,12,16]]
-    matrix=solution.rotate(matrix)
-    print(matrix)
+    # matrix = [[1, 2], [3, 4]]
+    # matrix = [[5,1,9,11],[2,4,8,10],[13,3,6,7],[15,14,12,16]]
+    # matrix=solution.rotate(matrix)
+    # print(matrix)
+
+    #12.
+    nums = [0,0,0,0]
+    res = solution.threeSum(nums)
+    print(res)
+
 
 

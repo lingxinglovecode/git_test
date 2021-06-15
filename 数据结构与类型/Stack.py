@@ -436,32 +436,44 @@ class Solution:
 
     ####问题7：钥匙与房间
     #https://leetcode-cn.com/leetbook/read/queue-stack/gle1r/
+
+    #解法1：深度优先算法
     def canVisitAllRooms(self, rooms) :
-        seen = set()
-        rooms_visied = set()
+        visited = set()
         stack = list()
-        stack.extend([(0,room,1) for room in rooms[0]])
-        seen.add(0)
-        max_visted = 0
+        stack.extend(rooms[0])
+        visited.add(0)
         while stack:
-            cur_room,next_room,visited_num = stack.pop()
+            next_room = stack.pop()
+            if next_room not in visited:
+                visited.add(next_room)
+                stack.extend(rooms[next_room])
+        return len(visited) == len(rooms)
 
+    #解法2：广度优先算法
+    def canVisitAllRooms(self,rooms):
+        visited =  set()
+        queue = collections.deque()
+        queue.extend(rooms[0])
+        visited.add(0)
+        while queue:
+            next_room = queue.popleft()
+            if next_room not in visited:
+                queue.extend(rooms[next_room])
+                visited.add(next_room)
+        return len(visited) == len(rooms)
 
-            if next_room not in seen:
-                visited_num += 1
-                seen.add(next_room)
-            if (cur_room,next_room) not in rooms_visied:
-                rooms_visied.add((cur_room, next_room))
-                for room_next_next in rooms[next_room]:
-                    if (next_room,room_next_next) not in rooms_visied:
-                        stack.append((next_room,room_next_next,visited_num))
-
-            if visited_num>max_visted:
-                max_visted = visited_num
-                if max_visted == len(rooms):
-                    return True
-
-        return False
+    #解法3：递归
+    def canVisitAllRooms(self,rooms):
+        visited = set()
+        def dfs(room_num):
+            if room_num in visited:
+                return
+            visited.add(room_num)
+            for room in rooms[room_num]:
+                dfs(room)
+        dfs(0)
+        return len(visited) == len(rooms)
 
 
 
