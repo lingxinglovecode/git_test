@@ -315,6 +315,126 @@ class Solution:
 
 
 
+    #13.矩阵归零
+    #https://leetcode-cn.com/leetbook/read/top-interview-questions-medium/xvmy42/
+
+    #内存消耗m*n
+    def setZeroes(self, matrix) :
+        row = len(matrix)
+        col = len(matrix[0])
+        memory = []
+        def help(x,y):
+            for i in range(row):
+                matrix[i][y] = 0
+            for j in range(col):
+                matrix[x][j] = 0
+
+
+        for i in range(row):
+            for j in range(col):
+                if matrix[i][j] == 0:
+                    memory.append((i,j))
+        for x,y in memory:
+            help(x,y)
+    #内存消耗m+n
+    def setZeroes(self,matrix):
+        row = len(matrix)
+        col = len(matrix[0])
+        memory_row = [1]*row
+        memory_col = [1]*col
+
+        for i in range(row):
+            for j in range(col):
+                if matrix[i][j] == 0:
+                    memory_col[j] = 0
+                    memory_row[i] = 0
+
+        for i in range(len(memory_row)):
+            if memory_row[i] == 0:
+                for col_idx in range(col):
+                    matrix[i][col_idx] = 0
+        for j in range(len(memory_col)):
+            if memory_col[j] == 0:
+                for row_idx in range(row):
+                    matrix[row_idx][j] = 0
+    #好吧瞎搞内存消耗还是m*n
+    def setZeroes(self,matrix):
+        memory = ""
+        row = len(matrix)
+        col = len(matrix[0])
+        for i in range(row):
+            for j in range(col):
+                if matrix[i][j] == 0:
+                    memory = memory+str(i)+"/"+str(j)+"/"
+        idx = 0
+        flag = 0
+        while idx<len(memory):
+            start = idx
+            bound = idx
+            while memory[bound] != '/':
+                bound =  bound+1
+            memory_num = int(memory[start:bound])
+            idx = bound+1
+            if flag == 0:
+                for col_idx in range(col):
+                    matrix[memory_num][col_idx] = 0
+                flag = 1
+            else:
+                for row_idx in range(row):
+                    matrix[row_idx][memory_num] = 0
+                flag = 0
+
+    def setZeroes(self,matrix):
+        row = len(matrix)
+        col = len(matrix[0])
+        flag_first_row = 0
+        flag_first_col = 0
+        for j in range(col):
+            if matrix[0][j] == 0:
+                flag_first_row = 1
+                break
+        for i in range(row):
+            if matrix[i][0] == 0:
+                flag_first_col = 1
+                break
+        for i in range(1,row):
+            for j in range(1,col):
+                if matrix[i][j] == 0:
+                    matrix[0][j] = 0
+                    matrix[i][0] = 0
+
+        # for m in range(1,col):
+        #     if matrix[0][m] == 0:
+        #         for row_idx in range(row):
+        #             matrix[row_idx][m] = 0
+        #
+        # for n in range(1,row):
+        #     if matrix[n][0] == 0:
+        #         for col_idx in range(col):
+        #             matrix[n][col_idx] = 0
+
+        #上面两个循环简化一下：
+        for n in range(1,row):
+            for m in range(1,col):
+                if matrix[n][0]==0 or matrix[0][m]==0:
+                    matrix[n][m] = 0
+
+
+        if flag_first_col == 1:
+            for j in range(col):
+                matrix[j][0] = 0
+
+        if flag_first_row == 1:
+            for i in range(row):
+                matrix[0][i] = 0
+
+
+
+
+
+
+
+
 
 
 
@@ -336,9 +456,14 @@ if __name__=='__main__':
     # print(matrix)
 
     #12.
-    nums = [0,0,0,0]
-    res = solution.threeSum(nums)
-    print(res)
+    # nums = [0,0,0,0]
+    # res = solution.threeSum(nums)
+    # print(res)
+
+    #13.
+    matrix = [[0,1,2,0],[3,4,5,2],[1,3,1,5]]
+    solution.setZeroes(matrix)
+    a = 2
 
 
 
