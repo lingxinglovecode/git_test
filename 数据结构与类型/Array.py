@@ -429,6 +429,40 @@ class Solution:
                 matrix[0][i] = 0
 
 
+    #14.字母异位词分组
+    #https://leetcode-cn.com/problems/group-anagrams/solution/zi-mu-yi-wei-ci-fen-zu-by-leetcode-solut-gyoc/
+
+    #方法1：哈希表
+    def  groupAnagrams(self, strs) :
+        hash_dict = dict()
+        idx = 0
+        res = []
+        for i in range(len(strs)):
+            list_s = list(strs[i])
+            list_s.sort()
+            sort_str = "".join(list_s)
+            if sort_str not in hash_dict:
+                hash_dict[sort_str] = idx
+                res.append([strs[i]])
+                idx = idx + 1
+            else:
+                idx = hash_dict[sort_str]
+                res[idx].append(strs[i])
+
+        return res
+
+    #方法1简化，哈希表值中直接存储列表
+    def  groupAnagrams(self, strs) :
+        hash_dict = collections.defaultdict(list)
+        for st in strs:
+            key = "".join(sorted(st))
+            hash_dict[key].append(st)
+        return list(hash_dict.values())
+
+
+
+
+
 
 
 

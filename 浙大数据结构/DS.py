@@ -14,8 +14,8 @@ class Solution:
             nums = [int(num) for num in input().split()]
             return k,nums
 
-# 实例1.1 最大子序和
-# https://pintia.cn/problem-sets/434/problems/5404
+# 编程题1-复杂度1 最大子序列和问题
+# https://pintia.cn/problem-sets/1399202744970727424/problems/1399203880238600192
     # 方法1：直接遍历求解
     def max_subsequence(self,k,nums):
         '''
@@ -80,9 +80,38 @@ class Solution:
                 temp = 0
         return max_res
 
-
-
-
+#编程题1-复杂度2： 最大子序列和问题
+# https://pintia.cn/problem-sets/1399202744970727424/problems/1399203880238600193
+#要求返回子序列的第一个和最后一个元素
+    def max_subsequence_2(self,k,nums):
+        temp = 0
+        max_res = 0
+        temp_start = 0
+        res_start = 0
+        res_end = 0
+        flag = 1
+        for i in range(k):
+            temp = temp + nums[i]
+            if flag:
+                temp_start = i
+                flag = 0
+            if temp > max_res:
+                max_res = temp
+                res_start = temp_start
+                res_end = i
+            elif temp < 0:
+                temp = 0
+                flag = 1
+        if max(nums) < 0:
+            res_start = 0
+            res_end = len(nums) - 1
+        elif max(nums) == 0:
+            for i in range(k):
+                if nums[i] == 0:
+                    res_start = i
+                    res_end = i
+                    break
+        return max_res, nums[res_start], nums[res_end]
 
 
 if __name__ == '__main__':
@@ -91,8 +120,8 @@ if __name__ == '__main__':
     if get_input:
         k,nums = solution.get_input('max_subsequence')
     k = 6
-    nums = [-2,11,-4,13,-5,-2]
-    print(solution.max_subsequence(k,nums))
+    nums = [-10,1,2,3,4,-5,-6,-3,4,3]
+    print(solution.max_subsequence_2(k,nums))
 
 
 
