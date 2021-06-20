@@ -460,6 +460,204 @@ class Solution:
         return list(hash_dict.values())
 
 
+    #15.无重复字符的最长子串
+    #https://leetcode-cn.com/leetbook/read/top-interview-questions-medium/xv2kgi/
+    #
+
+    def lengthOfLongestSubstring(self, s):
+        if s == '':
+            return 0
+        max_str = ''
+        max_len = 1
+
+        for i in range(len(s)-1):
+            for j in range(i+1,len(s)):
+                if s[j] not in s[i:j]:
+                    temp_len = j-i+1
+                    temp_str = s[i:j+1]
+                    if temp_len>max_len:
+                        max_len = temp_len
+                        max_str = temp_str
+                elif s[j] in s[i:j]:
+                    break
+        return max_len
+
+    def lengthOfLongestSubstring(self,s):
+        if len(s) == 0:
+            return 0
+        max_len = 1
+        slow = 0
+        fast = 1
+        while fast<len(s):
+            if s[fast] not in s[slow:fast]:
+                temp_len = fast-slow+1
+                fast = fast+1
+                if temp_len>max_len:
+                    max_len = temp_len
+            else:
+                slow = slow+1
+        return max_len
+
+    def lengthOfLongestSubstring(self,s):
+        if len(s) == 0:
+            return 0
+        max_len = 1
+        slow = 0
+        fast = 1
+        str_set = set()
+        str_set.add(s[0])
+        while fast < len(s):
+            if s[fast] not in str_set:
+                temp_len = fast - slow + 1
+                str_set.add(s[fast])
+                fast = fast + 1
+                if temp_len > max_len:
+                    max_len = temp_len
+            else:
+                str_set.remove(s[slow])
+                slow = slow + 1
+
+        return max_len
+
+    #15.最长回文子串
+
+    #超时
+    def longestPalindrome(self, s) :
+        max_res = ''
+        for i in range(len(s)):
+            for j in range(i+1,len(s)):
+                mid = (i+j)//2
+                if (j-i+1)%2 == 0:
+                    if s[i:mid+1] == s[mid+1:j+1][::-1]:
+                        temp = s[i:j + 1]
+                        if len(temp) > len(max_res):
+                            max_res = temp
+                else:
+                    if s[i:mid] == s[mid+1:j+1][::-1]:
+                        temp = s[i:j + 1]
+                        if len(temp) > len(max_res):
+                            max_res = temp
+        if len(s) > 0 and len(max_res) == 0:
+            return s[0]
+        return max_res
+
+    def longestPalindrome(self,s):
+        max_res = ''
+        def isPalindrome(s,i,j):
+            mid = (i + j) // 2
+            if (j - i + 1) % 2 == 0:
+                if s[i:mid + 1] == s[mid + 1:j + 1][::-1]:
+                    return True
+            else:
+                if s[i:mid] == s[mid + 1:j + 1][::-1]:
+                    return True
+            return False
+        fast_start = 0
+        for slow in range(len(s)):
+            for fast in range(fast_start, len(s)):
+                if s[slow] == s[fast] and isPalindrome(s, slow, fast):
+                    if fast - slow + 1 > len(max_res):
+                        max_res = s[slow:fast + 1]
+                    fast_start = fast+1
+
+        return max_res
+
+    #方法2：动态规划
+    def longestPalindrome(self,s):
+        if len(s) < 2:
+            return s
+        s_len = len(s)
+        P = [[0]*s_len for i in range(s_len)]
+        max_len = 0
+        for i in range(s_len):
+            P[i][i] = 1
+            if i+1<s_len and s[i]==s[i+1]:
+                P[i][i+1] = 1
+                max_idx = (i,i+1)
+                max_len = 2
+        for i in range(s_len-3,-1,-1):
+            for j in range(i+2,s_len):
+                if P[i+1][j-1] and s[i] == s[j]:
+                    P[i][j] = 1
+                    if j-i+1>max_len:
+                        max_idx = (i,j)
+                        max_len = j-i+1
+        x,y = max_idx
+        return s[x:y+1]
+
+    #方法3：中心扩展法
+    def longestPalindrome(self,s):
+        if len(s)<2:
+            return s
+        max_len = 0
+        max_str = ''
+        def expand(left,right):
+            is_True = False
+            if s[left] == s[right]:
+                is_True = True
+            else:
+                return is_True,left,right
+            while left-1>=0 and right+1<len(s) and s[left-1] == s[right+1]:
+                left -= 1
+                right += 1
+                is_True = True
+
+            return is_True,left,right
+
+
+        for i in range(len(s)):
+            is_True,left_1,right_1 = expand(i,i)
+            len_1 = right_1-left_1+1
+            if i+1<len(s):
+                is_True,left_2,right_2 = expand(i,i+1)
+                len_2 = 0
+                if is_True:
+                    len_2 = right_2 - left_2+1
+            if len_1>max_len and len_1>len_2:
+                max_len = len_1
+                max_str = s[left_1:right_1+1]
+            elif len_2>max_len:
+                max_len = len_2
+                max_str = s[left_2:right_2+1]
+        return max_str
+
+    #方法3：中心拓展法 代码简化
+    def longestPalindrome(self,s):
+        if len(s)<2:
+            return s
+        def expand(left,right):
+            while left>=0 and right<len(s) and s[left] == s[right]:
+                left -= 1
+                right += 1
+            return left+1,right-1
+        max_len = 0
+        for i in range(len(s)):
+            left_1,right_1 = expand(i,i)
+            left_2, right_2 = expand(i, i + 1)
+            if right_1-left_1+1>max_len:
+                max_str = s[left_1:right_1+1]
+                max_len = right_1-left_1+1
+            if right_2 - left_2 + 1 > max_len:
+                max_str = s[left_2:right_2 + 1]
+                max_len = right_2 - left_2 + 1
+        return max_str
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -495,9 +693,19 @@ if __name__=='__main__':
     # print(res)
 
     #13.
-    matrix = [[0,1,2,0],[3,4,5,2],[1,3,1,5]]
-    solution.setZeroes(matrix)
-    a = 2
+    # matrix = [[0,1,2,0],[3,4,5,2],[1,3,1,5]]
+    # solution.setZeroes(matrix)
+    # a = 2
+
+    #15.
+    # a = "pwwkew"
+    # res = solution.lengthOfLongestSubstring(a)
+    # print(res)
+
+    #16.最长回文子串
+    s = "aacabdkacaa"
+    res = solution.longestPalindrome(s)
+    print(res)
 
 
 
