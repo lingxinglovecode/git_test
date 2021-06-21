@@ -642,6 +642,37 @@ class Solution:
                 max_len = right_2 - left_2 + 1
         return max_str
 
+    #16.递增的三元序列
+    #https://leetcode-cn.com/leetbook/read/top-interview-questions-medium/xvvuqg/
+    def increasingTriplet(self, nums) :
+        min_num = float('inf')
+        mid_num = float('inf')
+        max_num = float('inf')
+        #换成for num in nums会更节省时间
+        for i in range(len(nums)):
+            if nums[i]<min_num:
+                min_num = nums[i]
+            elif nums[i]<mid_num and nums[i]>min_num:
+                mid_num = nums[i]
+            elif nums[i]>mid_num:
+                return True
+        return False
+
+    def increasingTriplet(self,nums):
+        min_num = nums[0]
+        mid_num = float('inf')
+        for i in range(1,len(nums)):
+            if nums[i]>min_num and nums[i]>mid_num:
+                return True
+            elif nums[i]>min_num:
+                mid_num = nums[i]
+            elif nums[i] < min_num:
+                min_num = nums[i]
+        return False
+
+
+
+
 
 
 
@@ -702,10 +733,9 @@ if __name__=='__main__':
     # res = solution.lengthOfLongestSubstring(a)
     # print(res)
 
-    #16.最长回文子串
-    s = "aacabdkacaa"
-    res = solution.longestPalindrome(s)
-    print(res)
+    #16.递增的三元序列
+    nums = [2, 1, 5, 0, 4, 6]
+    solution.increasingTriplet(nums)
 
 
 
