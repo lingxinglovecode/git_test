@@ -1,6 +1,8 @@
 #本节主要记录浙大数据结构课程中出现的编程题目，题目均可在在PTA中找到
 #PTA https://pintia.cn/problem-sets?tab=0
 #浙大版《数据结构（第2版）》题目集
+import collections
+
 
 class Polynomial:
     def __init__(self,coefficient=0,power=0,next=None):
@@ -8,6 +10,11 @@ class Polynomial:
         self.power = power
         self.next = next
 
+class ListNode:
+    def __init__(self,val=0,next=None,loc=None):
+        self.val = val
+        self.next = next
+        self.loc = loc
 
 
 class Solution:
@@ -22,7 +29,40 @@ class Solution:
         if self.fuc == 'multiple_sum':
             y1 = [int(num) for num in input().split()]
             y2 = [int(num) for num in input().split()]
-        return y1[0], y1[1:], y2[0], y2[1:]
+            return y1[0], y1[1:], y2[0], y2[1:]
+
+        if self.fuc == "reverse_klist":
+            node_dict = collections.defaultdict(list)
+            list_info = [num for num in input().split()]
+            head_loc = list_info[0]
+            num = int(list_info[1])
+            reverse_k = int(list_info[2])
+            node_list = []
+            for i in range(num):
+                temp_list = [num for num in input().split()]
+                for i in range(1,len(temp_list)):
+                    node_dict[temp_list[0]].append(temp_list[i])
+
+
+            #construct list
+            count = 1
+            head = ListNode()
+            head.val = node_dict[head_loc][0]
+            head.loc = head_loc
+            node = head
+            next_loc = head_loc
+            while next_loc in node_dict and count<num:
+                next_loc = node_dict[next_loc][1]
+                node.next = ListNode(val=node_dict[next_loc][0],loc=next_loc)
+                node = node.next
+                count += 1
+            return head,reverse_k,count
+
+
+
+
+
+
 
     def output(self,**kwargs):
         if self.fuc == "multiple_sum":
@@ -41,6 +81,14 @@ class Solution:
             print(' '.join(map(str, mul_result_list)))
             print(' '.join(map(str, sum_result_list)))
 
+        if self.fuc == "reverse_klist":
+            head = kwargs['start_node']
+            while head.next:
+                node_list = [head.loc,head.val,head.next.loc]
+                print(' '.join(map(str, node_list)))
+                head = head.next
+            node_list = [head.loc,head.val,-1]
+            print(' '.join(map(str, node_list)))
 
 # 编程题1-复杂度1 最大子序列和问题
 # https://pintia.cn/problem-sets/1399202744970727424/problems/1399203880238600192
@@ -255,6 +303,31 @@ class Solution:
         mul_result = polynomial_mul(y1_list,y2_list)
         return sum_result,mul_result
 
+#编程题4 线性结构3 反转链表
+    def reverse_klist(self,head,reverse_k,num):
+        times = num//reverse_k
+        def reverse(tail_node,start_node,k):
+
+            cur = start_node
+            for i in range(k-1):
+                temp = ListNode(val=cur.next.val,loc=cur.next.loc)
+                cur.next = cur.next.next
+                temp.next = start_node
+                start_node = temp
+            tail = cur
+            if tail_node:
+                tail_node.next = start_node
+            return start_node,tail
+        for i in range(times):
+            if i==0:
+                start_node,tail = reverse(None,head,reverse_k)
+                continue
+            _,tail = reverse(tail,tail.next, reverse_k)
+        return start_node
+
+
+
+
 
 if __name__ == '__main__':
     # solution = Solution()
@@ -266,10 +339,16 @@ if __name__ == '__main__':
     # print(solution.max_subsequence_2(k,nums))
 
     ##编程题2 一元多项式的乘法与加法运算
-    solution = Solution('multiple_sum')
-    sum_result,mul_result = solution.multiple_sum(0,[0,0],1,[-3,4])
-    solution.output(sum_result=sum_result,mul_result=mul_result)
-    a =2
+    # solution = Solution('multiple_sum')
+    # sum_result,mul_result = solution.multiple_sum(0,[0,0],1,[-3,4])
+    # solution.output(sum_result=sum_result,mul_result=mul_result)
+    # a =2
+
+    #编程题4 反转列表
+    solution = Solution("reverse_klist")
+    head, reverse_k, num = solution.get_input()
+    start_node = solution.reverse_klist(head, reverse_k, num)
+    solution.output(start_node=start_node)
 
 
 

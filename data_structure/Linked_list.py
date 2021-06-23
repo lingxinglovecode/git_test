@@ -300,6 +300,121 @@ class Solution:
         return False
 
 
+    #6.两数相加
+    #https://leetcode-cn.com/leetbook/read/top-interview-questions-medium/xvw73v/
+    def addTwoNumbers(self, l1, l2) :
+        res = ListNode(0)
+        head = res
+        while l1 and l2:
+            add_val = l1.val + l2.val
+            res.val = res.val + add_val
+            if res.val >= 10:
+                remain = res.val % 10
+                carry = res.val // 10
+                res.val = remain
+                temp = ListNode(0)
+                res.next = temp
+                res = res.next
+                res.val = carry
+                l1 = l1.next
+                l2 = l2.next
+                continue
+            l1 = l1.next
+            l2 = l2.next
+            if l1 or l2:
+                temp = ListNode(0)
+                res.next = temp
+                res = res.next
+        while l1:
+            res.val = l1.val + res.val
+
+            if res.val >= 10:
+                remain = res.val % 10
+                carry = res.val // 10
+                res.val = remain
+                temp = ListNode(0)
+                res.next = temp
+                res = res.next
+                res.val = carry
+                l1 = l1.next
+                continue
+
+            l1 = l1.next
+            if l1:
+                temp = ListNode(0)
+                res.next = temp
+                res = res.next
+        while l2:
+            res.val = l2.val + res.val
+
+            if res.val >= 10:
+                remain = res.val % 10
+                carry = res.val // 10
+                res.val = remain
+                temp = ListNode(0)
+                res.next = temp
+                res = res.next
+                res.val = carry
+                l2 = l2.next
+                continue
+            l2 = l2.next
+            if l2:
+                temp = ListNode(0)
+                res.next = temp
+                res = res.next
+        return head
+
+
+    def addTwoNumbers(self,l1,l2):
+        head = ListNode(x=None)
+        node = head
+        carry = 0
+        while l1 or l2:
+
+            add_1 = l1.val if l1 else 0
+            add_2 = l2.val if l2 else 0
+            add_res = add_1+add_2+carry
+
+            carry = add_res // 10
+            num = add_res % 10
+
+            if head.val != None:
+                node.next = ListNode(num)
+                node = node.next
+            else:
+                node.val = num
+
+            l1 = l1.next if l1 else None
+            l2 = l2.next if l2 else None
+        if carry>0:
+            node.next = ListNode(carry)
+        return head
+
+
+    #7.奇偶链表
+    #https://leetcode-cn.com/leetbook/read/top-interview-questions-medium/xvdwtj/
+    def oddEvenList(self, head) :
+        odd_head = head
+        even_head = head.next
+        node = head
+        count = 0
+        while node.next.next:
+            temp = node.next
+            node.next  = node.next.next
+            count += 1
+            node = temp
+        if count%2 == 0:
+            odd_tail = node
+            odd_tail.next = even_head
+        else:
+            even_tail = node
+            odd_tail = node.next
+            odd_tail.next = even_head
+            even_tail.next = None
+        return odd_head
+
+
+
 
 
 
@@ -324,10 +439,15 @@ if __name__ == '__main__':
         list_node_2.next = list_node_3
         list_node_3.next = list_node_4
 
+        list_1 = ListNode(1)
         list_2 = ListNode(2)
-        list_2.next = ListNode(3)
-        list_2.next.next = ListNode(4)
-    print(list_node_1)
+        list_3 = ListNode(3)
+        # list_4 = ListNode(4)
+        list_1.next = list_2
+        list_2.next = list_3
+        # list_3.next = list_4
+
+    # print(list_node_1)
     solution  = Solution()
     # new_node = solution.removeNthFromEnd(list_node_1,1)
     # solution.reverseList(list_node_1)
@@ -335,4 +455,9 @@ if __name__ == '__main__':
     # a=2
     # solution.isPalindrome(list_node_1)
     # solution.printList_reverse(list_2)
-    solution.hasCycle(list_node_1)
+    # solution.hasCycle(list_node_1)
+
+    # solution.addTwoNumbers(list_1,list_2)
+
+    #7奇偶链表
+    solution.oddEvenList(list_1)
