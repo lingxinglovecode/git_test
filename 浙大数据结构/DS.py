@@ -43,7 +43,6 @@ class Solution:
                 for i in range(1,len(temp_list)):
                     node_dict[temp_list[0]].append(temp_list[i])
 
-
             #construct list
             count = 1
             head = ListNode()
@@ -324,6 +323,52 @@ class Solution:
                 continue
             _,tail = reverse(tail,tail.next, reverse_k)
         return start_node
+
+def ReversingLinkedList():
+    head, list_num, reverse_k = map(int, input().split())
+    list_dict = dict()
+    for i in range(list_num):
+        add, val, next = map(int, input().split())
+        list_dict[add] = [val, next]
+
+    address_list = []
+    cur_address = head
+    while cur_address!=-1:
+        address_list.append(cur_address)
+        cur_address = list_dict[cur_address][1]
+
+    list_len = len(address_list)
+    times = list_len//reverse_k
+
+    def reverse_list(a_list,start,num):
+        rev_num = num//2
+        for i in range(rev_num):
+            a_list[start+i],a_list[start+num-i-1] = a_list[start+num-i-1],a_list[start+i]
+
+    start_idx = 0
+    for i in range(times):
+        reverse_list(address_list,start_idx,reverse_k)
+        start_idx = start_idx+reverse_k
+
+    for i in range(len(address_list)):
+        if i < len(address_list)-1:
+            next = "%05d"%address_list[i+1]
+        else:
+            next = '-1'
+        print("%05d"%address_list[i],list_dict[address_list[i]][0],next)
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

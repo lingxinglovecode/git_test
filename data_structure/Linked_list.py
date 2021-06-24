@@ -414,6 +414,90 @@ class Solution:
         return odd_head
 
 
+    #8.相交链表
+    #方法1：哈希表
+    def getIntersectionNode(self, headA,headB) :
+        node_A = headA
+        node_B = headB
+        node_dict = dict()
+        while node_A:
+            node_dict[node_A] = 1
+            node_A = node_A.next
+        while node_B:
+            if node_B in node_dict:
+                return node_B.val
+            node_B = node_B.next
+        return None
+
+    #方法2：根据链表长度找到可能的相交节点
+    def getIntersectionNode(self,headA,headB):
+        node_A = headA
+        node_B = headB
+        len_A  = 0
+        len_B = 0
+        while node_A:
+            len_A += 1
+            node_A = node_A.next
+        while node_B:
+            len_B += 1
+            node_B = node_B.next
+        first= headA
+        second = headB
+        if len_A<len_B:
+            move = len_B-len_A
+            while move:
+                second = second.next
+                move -= 1
+        elif len_A>len_B:
+            move = len_A-len_B
+            while move:
+                first = first.next
+                move -= 1
+        while first:
+            if first == second:
+                return first
+            first = first.next
+            second = second.next
+        return None
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
