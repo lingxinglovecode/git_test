@@ -13,6 +13,14 @@ class TreeNode:
         self.left = left
         self.right = right
 
+
+class Node:
+    def __init__(self,val=0,left=None,right=None,next=None):
+        self.val = val
+        self.left = left
+        self.right = right
+        self.next = next
+
 def list_to_tree(tree_list):
     if len(tree_list) == 0:
         return None
@@ -33,7 +41,25 @@ def list_to_tree(tree_list):
                 i = i+1
     return root
 
-
+def list_to_tree2(tree_list):
+    if len(tree_list) == 0:
+        return None
+    queue = collections.deque()
+    length = len(tree_list)
+    root = Node(tree_list[0])
+    queue.append(root)
+    i = 1
+    while i < length:
+        node = queue.popleft()
+        if node:
+            node.left = Node(tree_list[i]) if tree_list[i] else None
+            queue.append(node.left)
+            i = i + 1
+            if i < length:
+                node.right = Node(tree_list[i]) if tree_list[i] else None
+                queue.append(node.right)
+                i = i + 1
+    return root
 
 
 
@@ -555,6 +581,201 @@ class Solution:
         return build(0,len(preorder)-1,0,len(inorder)-1)
 
 
+    #6.填充每个节点的下一个右侧节点指针
+
+    #方法1：使用队列存储遍历每一行
+    def connect(self, root) :
+        if root == None:
+            return
+        node = root
+        queue = collections.deque()
+        layer_num = 1
+        queue.append(node)
+        while queue:
+            for i in range(2 ** (layer_num - 1)):
+                if i == 0:
+                    temp_node = queue.popleft()
+                next_node = queue.popleft() if i < 2 ** (layer_num - 1) - 1 else None
+                temp_node.next = next_node
+                if temp_node.left:
+                    queue.append(temp_node.left)
+                    queue.append(temp_node.right)
+                temp_node = next_node
+            layer_num += 1
+        return node
+
+    #优化：
+    def connect(self,root):
+        if not root:
+            return root
+        queue = collections.deque()
+        queue.append(root)
+        while queue:
+            size = len(queue)
+            while size:
+                node = queue.popleft()
+                if size:
+                    node.next = queue[0]
+                else:
+                    node.next = None
+                if node.left:
+                    queue.append(node.left)
+                if node.right:
+                    queue.append(node.right)
+        return root
+
+
+
+
+
+
+    ##方法2：直接通过节点遍历
+    def connect(self,root):
+        if not root:
+            return root
+        first = root
+        first.next = None
+        right = None
+        node = first
+        while first.left != None:
+
+            while node != None:
+                left = node.left
+                if right:
+                    right.next = left
+                right = node.right
+                if left:
+                    left.next = right
+                node = node.next
+            right.next = None
+            left=None
+            right=None
+            first = first.left
+            node = first
+        return root
+
+
+    def connect(self,root):
+        if not root:
+            return root
+        leftmost = root
+        while leftmost.left:
+            node = leftmost
+            while node:
+                node.left.next = node.right
+                if node.next:
+                    node.right.next = node.next.left
+                node = node.next
+            leftmost = leftmost.left
+        return root
+
+
+
+    #7.二叉搜索树中第k小的元素
+    #方法1：递归中序遍历
+    def kthSmallest(self, root, k ) :
+
+        def help(root):
+            if root == None:
+                return []
+            return help(root.left)+[root.val]+help(root.right)
+        node_list = help(root)
+        return node_list[k-1]
+
+
+
+
+    #方法2：栈中序遍历
+    def kthSmallest(self,root,k):
+
+        def help(root):
+            stack = list()
+            node = root
+            stack.append(root)
+            res = list()
+            while stack:
+
+                while node.left:
+                    node = node.left
+                    stack.append(node)
+                temp_node = stack.pop()
+                res.append(temp_node.val)
+                if temp_node.right:
+                    node = temp_node.right
+                    stack.append(node)
+            return res
+        node_list = help(root)
+        return node_list[k-1]
+
+    #方法2优化：栈中序遍历到结果就返回
+
+    def kthSmallest(self,root,k):
+        cnt = 0
+        stack = list()
+        node = root
+        stack.append(root)
+        res = list()
+        while stack:
+
+            while node.left:
+                node = node.left
+                stack.append(node)
+            temp_node = stack.pop()
+            res.append(temp_node.val)
+            cnt += 1
+            if cnt == k:
+                return temp_node.val
+            if temp_node.right:
+                node = temp_node.right
+                stack.append(node)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -657,9 +878,16 @@ if __name__ == '__main__':
     # solution.sortedArrayToBST(nums)
     # print(solution.inorderTraversal(tree))
 
-    solution.zigzagLevelOrder(tree)
+    # solution.zigzagLevelOrder(tree)
+    #
+    # preorder = [3, 9, 20, 15, 7]
+    # inorder = [9, 3, 15, 20, 7]
+    # tree=solution.buildTree(preorder,inorder)
+    # a=2
 
-    preorder = [3, 9, 20, 15, 7]
-    inorder = [9, 3, 15, 20, 7]
-    tree=solution.buildTree(preorder,inorder)
-    a=2
+    root = [1, 2, 3, 4, 5, 6, 7]
+    tree = list_to_tree2(root)
+    # res =solution.connect(tree)
+    # a=2
+
+    res=solution.kthSmallest(tree,2)
