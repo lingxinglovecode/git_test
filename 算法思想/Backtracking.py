@@ -1,6 +1,7 @@
 #本节是关于回溯算法的题目
 #h回溯的方法会探索所有的可能性并返回
 import copy
+import numpy as np
 class Solution:
 
     # 回溯算法的框架
@@ -402,6 +403,118 @@ class Solution:
         return result
 
 
+    #5.单词搜索 在一个矩阵中搜索是否含有固定词语
+
+    #回溯思想
+    def exist(self,board,word):
+        flag = np.ones_like(board)
+        row = len(board)
+        col = len(board[0])
+        def backtrack(index,flag,word_index):
+            flag[index] = '0'
+            if word_index == len(word):
+                return True
+
+            for dx, dy in [(0, 1), (1, 0), (0, -1), (-1, 0)]:
+                x = index[0] + dx
+                y = index[1] + dy
+                if x >= 0 and x < row and y >= 0 and y < col and flag[x][y]!='0' and board[x][y] == word[word_index]:
+                    if backtrack((x,y), copy.deepcopy(flag), word_index + 1):
+                        return True
+            return False
+
+        board = np.array(board)
+        for i in range(len(word)):
+            if word[i] not in board:
+                return False
+
+        for i in range(len(board)):
+            for j in range(len(board[0])):
+                if board[i][j] == word[0]:
+                    if backtrack((i,j),copy.deepcopy(flag),1):
+                        return True
+        return False
+
+
+
+    #回溯简化
+    def exist(self,board,word):
+        visited = set()
+        def check(i,j,k):
+            if board[i][j] != word[k]:
+                return False
+            if k == len(word)-1:
+                return True
+            visited.add((i,j))
+            result = False
+            for dx, dy in [(0, 1), (1, 0), (0, -1), (-1, 0)]:
+                new_x = dx+i
+                new_y = dy+j
+                if new_x>=0 and new_x<len(board) and new_y>=0 and new_y<len(board[0]) and (new_x,new_y) not in visited:
+                    if check(new_x,new_y,k+1):
+                        result = True
+                        break
+            visited.remove((i,j))
+            return result
+
+        for i in range(len(board)):
+            for j in range(len(board[0])):
+                if check(i,j,0):
+                    return True
+        return False
+
+
+
+    #再次简化，使用#表示已经搜索过的区域
+    def exist(self,board,word):
+
+        def check(i,j,k):
+            if board[i][j] != word[k]:
+                return False
+            if k == len(word)-1:
+                return True
+            flag = False
+            temp = board[i][j]
+            board[i][j] = '#'
+            for dx, dy in [(0, 1), (1, 0), (0, -1), (-1, 0)]:
+                new_x = i+dx
+                new_y = j+dy
+                if new_x>=0 and  new_x<len(board) and new_y>=0 and new_y<len(board[0]) and board[new_x][new_y]!='#':
+                    if check(new_x,new_y,k+1):
+                        flag = True
+                        break
+            board[i][j] = temp
+            return flag
+
+
+        for i in range(len(board)):
+            for j in range(len(board[0])):
+                if check(i,j,0):
+                    return True
+        return False
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -415,6 +528,9 @@ if __name__ == '__main__':
     solution.generateParenthesis(4)
     solution.subsets([1,2,3])
 
+    board =[["A","B","C","E"],["S","F","C","S"],["A","D","E","E"]]
+    word = "SEE"
+    print(solution.exist(board,word))
 
 
 
