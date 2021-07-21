@@ -60,11 +60,57 @@ class Solution:
             return nums1
 
 
+    #题目2：颜色分类
+    #https://leetcode-cn.com/leetbook/read/top-interview-questions-medium/xvg25c/
+    def sortColors(self,nums):
+        if not nums or len(nums)==1:
+            return nums
+        slow = 0
+        while slow<len(nums)-1:
+            fast = slow+1
+            for i in range(fast,len(nums)):
+                if nums[i]<nums[slow]:
+                    nums[slow],nums[i] = nums[i],nums[slow]
+            slow = slow+1
+
+        return nums
+
+    def sortColors(self,nums):
+        zero = 0
+        one = 0
+        two = 0
+        for i in range(len(nums)):
+            if nums[i] == 0:
+                zero += 1
+            elif nums[i] == 1:
+                one += 1
+            else:
+                two += 1
+        for i in range(0,zero):
+            nums[i] = 0
+        for i in range(zero,zero+one):
+            nums[i] = 1
+        for i in range(zero+one,zero+one+two):
+            nums[i] = 2
+
+        return nums
 
 
-
-
-
+    def sortColors(self,nums):
+        cur = 0
+        start = 0
+        end = len(nums)-1
+        while cur <= end:
+            if nums[cur]==0:
+                nums[cur],nums[start] = nums[start],nums[cur]
+                start += 1
+            elif nums[cur]==2:
+                nums[cur],nums[end] = nums[end],nums[cur]
+                end -= 1
+                if nums[cur]!=1:
+                    cur -= 1
+            cur += 1
+        return nums
 
 
 
@@ -72,7 +118,8 @@ class Solution:
 
 if __name__ == '__main__':
     solution = Solution()
-    nums1 = [1,2,3,0,0,0]
+    nums1 = [2,0,2,1,1,0]
     m,n = 3,3
     nums2 = [2, 5, 6]
-    solution.merge(nums1,m,nums2,n)
+    # solution.merge(nums1,m,nums2,n)
+    print(solution.sortColors(nums1))
