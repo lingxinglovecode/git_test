@@ -41,3 +41,56 @@ class Solution:
                 left = mid+1
         return left
 
+    #题目2：寻找峰值
+    #https://leetcode-cn.com/leetbook/read/top-interview-questions-medium/xv4hjg/
+
+    #方法1：线性扫描 暴力求解
+    def findPeakElement(self, nums):
+        if len(nums) == 1:
+            return 0
+        if nums[0] > nums[1]:
+            return 0
+        if nums[len(nums) - 1] > nums[len(nums) - 2]:
+            return len(nums) - 1
+        for i in range(1, len(nums) - 1):
+            if nums[i] > nums[i - 1] and nums[i] > nums[i + 1]:
+                return i
+
+    #方法2：递归二分查找
+    def findPeakElement(self,nums):
+
+        def search(left,right):
+            if left == right:
+                return left
+            mid = (right+left)//2
+            if nums[mid]>nums[mid+1]:
+                result =  search(left,mid)
+            else:
+                result =  search(mid+1,right)
+            return result
+
+        return search(0,len(nums)-1)
+
+    #方法3：迭代二分查找
+    def findPeakElement(self,nums):
+        left = 0
+        right = len(nums)-1
+        while left < right:
+            mid = (left+right)//2
+            if nums[mid]>nums[mid+1]:
+                right = mid
+            else:
+                left = mid+1
+        return left
+
+
+
+
+
+
+if __name__ == '__main__':
+    solution = Solution()
+    nums = [1,2,3,1]
+    print(solution.findPeakElement(nums))
+
+

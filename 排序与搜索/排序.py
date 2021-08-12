@@ -1,6 +1,76 @@
 import collections
 class Solution:
 
+    ##经典排序算法：
+    # TODO 排序算法实现
+
+    #1.快速排序
+    def quicksort(self,nums):
+
+        def quick(left,right):
+            if left >= right:
+                return
+            pivot = left
+            i = left
+            j = right
+            while i < j:
+                #一定要先从后开始
+                while nums[i] <= nums[pivot] and i < j:
+                    i += 1
+                while nums[j] > nums[pivot] and i < j:
+                    j -= 1
+
+                nums[i],nums[j] = nums[j],nums[i]
+            nums[i],nums[pivot] = nums[pivot],nums[i]
+
+            quick(left,i-1)
+            quick(left+1,right)
+
+        quick(0,len(nums)-1)
+        return nums
+
+    #2.堆排序
+    def HeapSort(self,nums):
+
+        def sift_up(heap,node_idx):
+
+            while node_idx>>1 > 0 and heap[node_idx] < heap[node_idx>>1]:
+                heap[node_idx],heap[node_idx>>1] = heap[node_idx>>1],heap[node_idx]
+                node_idx = node_idx>>1
+
+        def sink_down(heap,root):
+            cur = heap[root]
+            while root<<1 < heap_len:
+                child = root<<1
+                if child|1<heap_len and heap[child|1]<heap[child]:
+                    child = child|1
+                if heap[root] > heap[child]:
+                    heap[root] = heap[child]
+                    root = child
+                else:
+                    break
+                heap[root] = cur
+
+        heap = [0]
+        # 构建一个最小堆
+        for i in range(len(nums)):
+            heap.append(nums[i])
+            sift_up(heap, len(heap) - 1)
+
+        heap_len = len(heap)
+        for i in range(len(heap)-1,1,-1):
+            heap[i],heap[1] = heap[1],heap[i]
+            heap_len = heap_len-1
+            sink_down(heap,1) #对子堆重新建立最小堆
+
+        return heap[1:]
+
+
+
+
+
+
+
     #题目一:合并两个有序列表
 
     #方法1：冒泡排序
@@ -152,7 +222,7 @@ class Solution:
                 child >>= 1
             heap[child] = cur
 
-        def sink_down(heap,root):
+        def sift_down(heap,root):
             cur = heap[root]
             while root<<1<len(heap):
                 child = root<<1
@@ -176,12 +246,77 @@ class Solution:
         for j in range(k,len(stat)):
             if stat[j][1]>heap[1][1]:
                 heap[1] = stat[j]
-                sink_down(heap,1)
+                sift_down(heap,1)
         for i in range(len(heap)-1,1,-1):
             heap[i],heap[1] = heap[1],heap[i]
-            sink_down(heap[:i],1)
+            sift_down(heap[:i],1)
 
         return [item[0] for item in heap[1:]]
+
+    #题目4：数组中的第K大个元素
+    #https://leetcode-cn.com/leetbook/read/top-interview-questions-medium/xvsehe/
+
+    #方法1：选择排序
+    def findKthLargest(self, nums, k) :
+        if nums == []:
+            return
+        for i in range(len(nums)):
+            for j in range(i,len(nums)):
+                if nums[j] > nums[i]:
+                    nums[j],nums[i] = nums[i],nums[j]
+        return nums[k-1]
+
+
+    #方法2：快速排序
+    def findKthLargest(self,nums,k):
+        if not nums:
+            return
+        self.quicksort(nums)
+        return nums[len(nums)-k]
+
+    #方法3：堆排序
+    def findKthLargest(self,nums,k):
+        if not nums:
+            return
+        nums = self.HeapSort(nums)
+        return nums[k-1]
+
+    def findKthLargest(self,nums,k):
+        if not nums:
+            return
+
+        def sift_up(heap,child):
+
+            while child>>1 > 0 and heap[child] < heap[child>>1]:
+                heap[child],heap[child>>1] = heap[child>>1],heap[child]
+                child = child>>1
+
+        def sift_down(heap,root):
+
+            while root <<1 < len(heap):
+                child = root<<1
+                if root<<1|1 < len(heap) and heap[root<<1|1] < heap[root<<1]:
+                    child = root<<1|1
+                if heap[root] > heap[child]:
+                    heap[root],heap[child] = heap[child],heap[root]
+                    root = child
+                else:
+                    break
+
+        heap = [0]
+        for i in range(k):
+            heap.append(nums[i])
+            sift_up(heap,len(heap)-1)
+
+        for j in range(k,len(nums)):
+            if nums[j] > heap[1]:
+                heap[1] = nums[j]
+                sift_down(heap,1)
+        return heap[1]
+
+
+
+
 if __name__ == '__main__':
     solution = Solution()
     nums1 = [2,0,2,1,1,1]
@@ -190,3 +325,11 @@ if __name__ == '__main__':
     # solution.merge(nums1,m,nums2,n)
     print(solution.sortColors(nums1))
     print(solution.topKFrequent(nums1,2))
+
+    #题目4
+    nums = [3,2,3,1,2,4,5,5,6]
+    k = 2
+
+    # solution.quicksort(nums)
+    # nums = solution.HeapSort(nums)
+    print(solution.findKthLargest(nums,k))
