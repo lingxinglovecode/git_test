@@ -83,14 +83,76 @@ class Solution:
                 left = mid+1
         return left
 
+    #题目3：在排序数组中查找元素的第一个和最后一个位置
+    #解法1：线性扫描 暴力求解
+    def searchRange(self,nums,target):
+        result = [-1,-1]
+        start_flag = 1
+        for i in range(len(nums)):
+            if nums[i] == target and start_flag:
+                result[0] = i
+                start_flag = 0
+            if nums[i] == target:
+                result[1] = i
+        return result
 
+    #解法2：二分查找+线性扫描
+    def searchRange(self,nums,target):
+        result = [-1,-1]
+        def search(start,end):
+            mid = (start+end)//2
+            if start > end:
+                return
+            if nums[mid] == target:
+                head = mid
+                tail = mid
+                while head>=0 and nums[head] == target:
+                    result[0] = head
+                    head -= 1
+                while tail<len(nums) and nums[tail] == target:
+                    result[1] = tail
+                    tail += 1
+                return
+            if nums[mid]>target:
+                search(start,mid-1)
+            if nums[mid]<target:
+                search(mid+1,end)
 
+        search(0,len(nums)-1)
+        return result
+    #解法3：两次二分查找
+    def searchRange(self,nums,target):
+        if not nums:
+            return [-1, -1]
+        result = [-1, -1]
+
+        def binary_search(target):
+            left = 0
+            right = len(nums) - 1
+            idx = len(nums)
+            while left <= right:
+                mid = (left + right) // 2
+                if nums[mid] < target:
+                    left = mid + 1
+                elif nums[mid] >= target:
+                    idx = mid
+                    right = mid - 1
+            return idx
+
+        result[0] = binary_search(target)
+        result[1] = binary_search(target + 1) - 1
+        if result[0] < len(nums) and nums[result[0]] == target:
+            return result
+        return [-1, -1]
 
 
 
 if __name__ == '__main__':
     solution = Solution()
-    nums = [1,2,3,1]
-    print(solution.findPeakElement(nums))
+    nums = [1,2,3,3,3]
+    # print(solution.findPeakElement(nums))
+
+    nums.sort()
+    solution.searchRange(nums,3)
 
 
