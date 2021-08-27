@@ -316,6 +316,37 @@ class Solution:
 
 
 
+    ##题目5 合并区间
+
+
+    ##方法1：排序后双指针
+    def merge(self, intervals):
+        start = []
+        end = []
+        for i,j in intervals:
+            start.append(i)
+            end.append(j)
+        start.sort()
+        end.sort()
+        cur = 0
+        end_idx = 0
+        result = []
+        while cur+1 <= len(start):
+            start_idx = 0 if cur == 0 else cur
+            while cur+1 < len(start) and start[cur+1] <= end[end_idx]:
+                cur += 1
+                end_idx += 1
+            else:
+                result.append([start[start_idx],end[end_idx]])
+                end_idx += 1
+                cur += 1
+        return result
+
+    ##方法2：排序后合并
+
+
+
+
 
 if __name__ == '__main__':
     solution = Solution()
@@ -332,4 +363,9 @@ if __name__ == '__main__':
 
     # solution.quicksort(nums)
     # nums = solution.HeapSort(nums)
-    print(solution.findKthLargest(nums,k))
+    # print(solution.findKthLargest(nums,k))
+
+
+    #题目5 合并区间
+    intervals = [[1,3],[2,6],[8,10],[15,18]]
+    print(solution.merge(intervals))
